@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import {
   ErrorComponent,
   Link,
@@ -20,15 +21,13 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
     <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-4">
       <ErrorComponent error={error} />
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
+        <Button
           onClick={() => {
             router.invalidate()
           }}
-          className="rounded bg-gray-600 px-2 py-1 font-extrabold text-white uppercase dark:bg-gray-700"
         >
           Try Again
-        </button>
+        </Button>
         {isRoot ? (
           <Link
             to="/"

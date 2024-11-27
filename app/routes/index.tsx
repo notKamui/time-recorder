@@ -1,4 +1,5 @@
 import * as fs from 'node:fs'
+import { Button } from '@/components/ui/button'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 
@@ -33,16 +34,14 @@ function Home() {
   const state = Route.useLoaderData()
 
   return (
-    <button
-      type="button"
+    <Button
       onClick={() => {
         updateCount({ data: 1 }).then(() => {
           router.invalidate()
         })
       }}
-      className="rounded bg-emerald-500 px-2 py-1 font-black text-sm text-white uppercase"
     >
       Add 1 to {state}?
-    </button>
+    </Button>
   )
 }
