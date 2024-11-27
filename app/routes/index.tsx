@@ -40,6 +40,7 @@ function Home() {
           router.invalidate()
         })
       }}
+      className="rounded bg-emerald-500 px-2 py-1 font-black text-sm text-white uppercase"
     >
       Add 1 to {state}?
     </button>
