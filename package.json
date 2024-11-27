@@ -4,9 +4,12 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "lint": "bunx biome check",
+    "lint:fix": "bunx biome check --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/bun": "latest",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -21,5 +24,6 @@
   },
   "peerDependencies": {
     "typescript": "^5.7.2"
-  }
+  },
+  "trustedDependencies": ["@biomejs/biome", "@parcel/watcher"]
 }

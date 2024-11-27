@@ -1,3 +1,3 @@
-import { defineConfig } from "@tanstack/start/config";
+import { defineConfig } from '@tanstack/start/config'
 
-export default defineConfig({});
+export default defineConfig({})
