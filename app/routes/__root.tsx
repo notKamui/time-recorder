@@ -1,4 +1,7 @@
+import { ThemeProvider } from '@/components/theme/provider'
+import { $getTheme } from '@/server/theme'
 import appCss from '@/styles/index.css?url'
+import { cn } from '@/utils/cn'
 import {
   Outlet,
   ScrollRestoration,
@@ -24,6 +27,10 @@ export const Route = createRootRoute({
     links: [{ rel: 'stylesheet', href: appCss }],
   }),
   component: RootComponent,
+  loader: async () => {
+    const { uiTheme } = await $getTheme()
+    return { uiTheme }
+  },
 })
 
 function RootComponent() {
@@ -35,13 +42,15 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const { uiTheme } = Route.useLoaderData()
+
   return (
-    <html lang="en">
+    <html lang="en" className={cn(uiTheme)}>
       <head>
         <Meta />
       </head>
       <body>
-        {children}
+        <ThemeProvider theme={uiTheme}>{children}</ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
