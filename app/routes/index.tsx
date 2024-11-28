@@ -4,23 +4,21 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/')({
-  component: Home,
+  component: () => {
+    const [state, setState] = useState(0)
+
+    return (
+      <div>
+        <ThemeToggle />
+        <Button
+          onClick={() => {
+            console.log('Adding 1 to', state)
+            setState((prev) => prev + 1)
+          }}
+        >
+          Add 1 to {state}?
+        </Button>
+      </div>
+    )
+  },
 })
-
-function Home() {
-  const [state, setState] = useState(0)
-
-  return (
-    <div>
-      <ThemeToggle />
-      <Button
-        onClick={() => {
-          console.log('Adding 1 to', state)
-          setState((prev) => prev + 1)
-        }}
-      >
-        Add 1 to {state}?
-      </Button>
-    </div>
-  )
-}
