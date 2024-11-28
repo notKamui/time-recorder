@@ -8,10 +8,7 @@ export const Route = createFileRoute('/login')({
 function RouteComponent() {
   return (
     <>
-      <h1>Sign in</h1>
-      <Button asChild>
-        <a href="/api/login/google">Sign in with Google</a>
-      </Button>
+      <Button>Sign in</Button>
     </>
   )
 }
