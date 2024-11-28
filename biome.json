@@ -42,6 +42,12 @@
             "attributes": ["class", "className", "classNames"],
             "functions": ["cn", "tv", "clsx", "twMerge"]
           }
+        },
+        "useComponentExportOnlyModules": {
+          "level": "warn",
+          "options": {
+            "allowConstantExport": true
+          }
         }
       }
     }

@@ -5,7 +5,6 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { Meta, Scripts } from '@tanstack/start'
-import type { ReactNode } from 'react'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -18,33 +17,23 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Time Recorder',
       },
     ],
     links: [{ rel: 'stylesheet', href: appCss }],
   }),
-  component: RootComponent,
+  component: () => {
+    return (
+      <html lang="en">
+        <head>
+          <Meta />
+        </head>
+        <body>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </html>
+    )
+  },
 })
-
-function RootComponent() {
-  return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  )
-}
-
-function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  )
-}
