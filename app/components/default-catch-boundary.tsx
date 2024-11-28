@@ -28,25 +28,21 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
         >
           Try Again
         </Button>
-        {isRoot ? (
-          <Link
-            to="/"
-            className="rounded bg-gray-600 px-2 py-1 font-extrabold text-white uppercase dark:bg-gray-700"
-          >
-            Home
-          </Link>
-        ) : (
-          <Link
-            to="/"
-            className="rounded bg-gray-600 px-2 py-1 font-extrabold text-white uppercase dark:bg-gray-700"
-            onClick={(e) => {
-              e.preventDefault()
-              window.history.back()
-            }}
-          >
-            Go Back
-          </Link>
-        )}
+        <Button asChild>
+          {isRoot ? (
+            <Link to="/">Home</Link>
+          ) : (
+            <Link
+              to="/"
+              onClick={(e) => {
+                e.preventDefault()
+                window.history.back()
+              }}
+            >
+              Go Back
+            </Link>
+          )}
+        </Button>
       </div>
     </div>
   )
