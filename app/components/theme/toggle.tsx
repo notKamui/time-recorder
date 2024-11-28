@@ -1,7 +1,7 @@
 import { Moon, Sun } from 'lucide-react'
 
-import { useTheme } from '@/components/theme/provider'
 import { Button } from '@/components/ui/button'
+import { useTheme } from '@/hooks/theme'
 import { $setTheme } from '@/server/theme'
 import { useRouter } from '@tanstack/react-router'
 
