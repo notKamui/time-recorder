@@ -1,4 +1,5 @@
 import { $csrfMiddleware } from '@server/middlewares/csrf'
+import { validate } from '@server/utils/validate'
 import { createServerFn } from '@tanstack/start'
 import { z } from 'vinxi'
 import { getCookie, setCookie } from 'vinxi/server'
@@ -8,10 +9,8 @@ const ThemeSchema = z.object({
 })
 
 export const $setTheme = createServerFn({ method: 'POST' })
-  .validator((data: z.infer<typeof ThemeSchema>) => ThemeSchema.parse(data))
+  .validator(validate(ThemeSchema))
   .handler(async ({ data }) => {
-    console.log('Setting theme:', data.theme)
-
     setCookie('ui-theme', data.theme)
   })
 

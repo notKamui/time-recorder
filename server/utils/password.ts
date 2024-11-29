@@ -20,13 +20,11 @@ export async function verifyPasswordStrength(
 
   const hash = encodeHexLowerCase(sha1(new TextEncoder().encode(password)))
   const hashPrefix = hash.slice(0, 5)
-  console.log(hashPrefix)
 
   const response = await fetch(
     `https://api.pwnedpasswords.com/range/${hashPrefix}`,
   )
   const data = await response.text()
-  console.log(data)
 
   const items = data.split('\n')
   return !items.some(

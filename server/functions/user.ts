@@ -12,6 +12,7 @@ import {
   generateSessionToken,
   setSessionTokenCookie,
 } from '@server/utils/session'
+import { validate } from '@server/utils/validate'
 import { redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 import { eq } from 'drizzle-orm'
@@ -47,9 +48,7 @@ const SignUpSchema = z
   })
 
 export const $signUp = createServerFn({ method: 'POST' })
-  .validator((data: z.infer<typeof SignUpSchema>) =>
-    SignUpSchema.parseAsync(data),
-  )
+  .validator(validate(SignUpSchema, { async: true }))
   .handler(async ({ data }) => {
     const { username, password } = await data
     const hashedPassword = await hashPassword(password)
@@ -70,7 +69,7 @@ const SignInSchema = z.object({
 })
 
 export const $signIn = createServerFn({ method: 'POST' })
-  .validator((data: z.infer<typeof SignInSchema>) => SignInSchema.parse(data))
+  .validator(validate(SignInSchema))
   .handler(async ({ data: { username, password } }) => {
     const user = await db
       .select()
