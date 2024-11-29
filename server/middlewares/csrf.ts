@@ -1,6 +1,6 @@
 import 'dotenv/config'
-import { createMiddleware } from "@tanstack/start";
-import { getRequestHeader, setResponseStatus } from "vinxi/http";
+import { createMiddleware } from '@tanstack/start'
+import { getRequestHeader, setResponseStatus } from 'vinxi/http'
 
 export const $csrfMiddleware = createMiddleware().server(async ({ next }) => {
   const origin = getRequestHeader('Origin')
