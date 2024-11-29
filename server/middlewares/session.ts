@@ -7,7 +7,6 @@ import {
 } from '@server/utils/session'
 import { redirect } from '@tanstack/react-router'
 import { createMiddleware } from '@tanstack/start'
-import 'dotenv/config'
 import { setResponseStatus } from 'vinxi/http'
 
 export const $sessionMiddleware = createMiddleware()

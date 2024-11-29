@@ -10,7 +10,7 @@ export const usersTable = pgTable('users', {
 export type User = InferSelectModel<typeof usersTable>
 
 export const sessionsTable = pgTable('sessions', {
-  id: uuid().primaryKey().defaultRandom().$type<UUID>(),
+  id: varchar({ length: 64 }).primaryKey(),
   userId: uuid()
     .notNull()
     .references(() => usersTable.id)

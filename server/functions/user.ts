@@ -21,7 +21,7 @@ const SignUpSchema = z
     username: z.string().trim().min(3).max(32),
     password: z
       .string()
-      .refine(async (value) => await verifyPasswordStrength(value)),
+      ,//.refine(async (value) => await verifyPasswordStrength(value)),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword)

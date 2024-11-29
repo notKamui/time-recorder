@@ -2,16 +2,15 @@ import { Moon, Sun } from 'lucide-react'
 
 import { Button } from '@app/components/ui/button'
 import { useTheme } from '@app/hooks/theme'
-import { $setTheme } from '@server/functions/theme'
 import { useRouter } from '@tanstack/react-router'
 
 export function ThemeToggle() {
   const router = useRouter()
-  const { theme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   function toggleTheme() {
     const newTheme = theme === 'light' ? 'dark' : 'light'
-    $setTheme({ data: { theme: newTheme } }).then(() => router.invalidate())
+    setTheme({ data: { theme: newTheme } }).then(() => router.invalidate())
   }
 
   return (
