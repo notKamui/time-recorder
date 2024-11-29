@@ -37,7 +37,7 @@ function RouteComponent() {
           <input
             type="username"
             id="username"
-            name='username'
+            name="username"
             required
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           />
@@ -52,9 +52,9 @@ function RouteComponent() {
           <input
             type="password"
             id="password"
-            name='password'
+            name="password"
             required
-            autoComplete='password'
+            autoComplete="password"
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           />
         </div>
@@ -68,9 +68,9 @@ function RouteComponent() {
           <input
             type="password"
             id="confirmPassword"
-            name='confirmPassword'
+            name="confirmPassword"
             required
-            autoComplete='password'
+            autoComplete="password"
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           />
         </div>

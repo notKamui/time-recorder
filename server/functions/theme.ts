@@ -1,5 +1,5 @@
 import { $csrfMiddleware } from '@server/middlewares/csrf'
-import { validate } from '@server/middlewares/validate'
+import { validate } from '@server/utils/validate'
 import { createServerFn } from '@tanstack/start'
 import { z } from 'vinxi'
 import { getCookie, setCookie } from 'vinxi/server'

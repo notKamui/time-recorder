@@ -5,6 +5,6 @@ export default defineConfig({
   schema: './server/db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: "postgres://timerecorder:timerecorder@localhost:5432/timerecorder",
+    url: process.env.DATABASE_URL!,
   },
 })

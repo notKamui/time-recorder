@@ -2,7 +2,6 @@ import type { UUID } from '@common/utils/uuid'
 import { db, takeUniqueOrNull } from '@server/db'
 import { usersTable } from '@server/db/schema'
 import { $sessionMiddleware } from '@server/middlewares/session'
-import { validate } from '@server/middlewares/validate'
 import {
   hashPassword,
   verifyPassword,
@@ -13,6 +12,7 @@ import {
   generateSessionToken,
   setSessionTokenCookie,
 } from '@server/utils/session'
+import { validate } from '@server/utils/validate'
 import { redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 import { eq } from 'drizzle-orm'
