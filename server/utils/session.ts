@@ -1,12 +1,18 @@
-import { db, takeUniqueOrNull } from '@/db'
-import { type Session, type User, sessionsTable, usersTable } from '@/db/schema'
-import type { UUID } from '@/utils/uuid'
+import type { UUID } from '@common/utils/uuid'
 import { sha256 } from '@oslojs/crypto/sha2'
 import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from '@oslojs/encoding'
+import { db, takeUniqueOrNull } from '@server/db'
+import {
+  type Session,
+  type User,
+  sessionsTable,
+  usersTable,
+} from '@server/db/schema'
 import { eq } from 'drizzle-orm'
+import { deleteCookie, getCookie, setCookie } from 'vinxi/http'
 
 const HOUR = 1000 * 60 * 60
 const DAY = HOUR * 24
@@ -15,7 +21,7 @@ const SESSION_DURATION = DAY * 30
 const SESSION_REFRESH_THRESHOLD = DAY * 15
 
 export type SessionValidationResult =
-  | { session: Session; user: User }
+  | { session: Session; user: Omit<User, 'hashedPassword'> }
   | { session: null; user: null }
 
 export function generateSessionToken(): string {
@@ -28,7 +34,9 @@ export async function createSession(
   token: string,
   userId: UUID,
 ): Promise<Session> {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
+  const sessionId = encodeHexLowerCase(
+    sha256(new TextEncoder().encode(token)),
+  ) as UUID
   const session = {
     id: sessionId,
     userId,
@@ -41,10 +49,15 @@ export async function createSession(
 export async function validateSessionToken(
   token: string,
 ): Promise<SessionValidationResult> {
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
+  const sessionId = encodeHexLowerCase(
+    sha256(new TextEncoder().encode(token)),
+  ) as UUID
 
   const result = await db
-    .select({ user: usersTable, session: sessionsTable })
+    .select({
+      user: { id: usersTable.id, username: usersTable.username },
+      session: sessionsTable,
+    })
     .from(sessionsTable)
     .innerJoin(usersTable, eq(sessionsTable.userId, usersTable.id))
     .where(eq(sessionsTable.id, sessionId))
@@ -72,6 +85,26 @@ export async function validateSessionToken(
   return { session, user }
 }
 
-export async function invalidateSession(sessionId: string): Promise<void> {
+export async function invalidateSession(sessionId: UUID): Promise<void> {
   await db.delete(sessionsTable).where(eq(sessionsTable.id, sessionId))
+}
+
+const SESSION_COOKIE_NAME = 'session'
+
+export function getSessionTokenCookie(): string | null {
+  return getCookie(SESSION_COOKIE_NAME) ?? null
+}
+
+export function setSessionTokenCookie(token: string, expiresAt: Date) {
+  setCookie(SESSION_COOKIE_NAME, token, {
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+    expires: expiresAt,
+  })
+}
+
+export function deleteSessionTokenCookie() {
+  deleteCookie(SESSION_COOKIE_NAME)
 }

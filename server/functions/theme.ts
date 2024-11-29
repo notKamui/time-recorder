@@ -1,3 +1,4 @@
+import { $csrfMiddleware } from '@server/middlewares/csrf'
 import { createServerFn } from '@tanstack/start'
 import { z } from 'vinxi'
 import { getCookie, setCookie } from 'vinxi/server'
@@ -14,13 +15,15 @@ export const $setTheme = createServerFn({ method: 'POST' })
     setCookie('ui-theme', data.theme)
   })
 
-export const $getTheme = createServerFn({ method: 'GET' }).handler(async () => {
-  let uiTheme = getCookie('ui-theme') as 'light' | 'dark' | undefined
-  if (!uiTheme) {
-    uiTheme = 'dark'
-    setCookie('ui-theme', uiTheme)
-  }
-  return {
-    uiTheme,
-  }
-})
+export const $getTheme = createServerFn({ method: 'GET' })
+  .middleware([$csrfMiddleware])
+  .handler(async () => {
+    let uiTheme = getCookie('ui-theme') as 'light' | 'dark' | undefined
+    if (!uiTheme) {
+      uiTheme = 'dark'
+      setCookie('ui-theme', uiTheme)
+    }
+    return {
+      uiTheme,
+    }
+  })

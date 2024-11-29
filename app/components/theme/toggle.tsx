@@ -1,8 +1,8 @@
 import { Moon, Sun } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import { useTheme } from '@/hooks/theme'
-import { $setTheme } from '@/server/theme'
+import { $setTheme } from '@app/'
+import { Button } from '@app/components/ui/button'
+import { useTheme } from '@app/hooks/theme'
 import { useRouter } from '@tanstack/react-router'
 
 export function ThemeToggle() {

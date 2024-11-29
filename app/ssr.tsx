@@ -1,6 +1,6 @@
 /// <reference types="vinxi/types/server" />
 
-import { createRouter } from '@/router'
+import { createRouter } from '@app/router'
 import { getRouterManifest } from '@tanstack/start/router-manifest'
 import {
   createStartHandler,

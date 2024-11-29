@@ -1,7 +1,7 @@
-import { ThemeProvider } from '@/components/theme/provider'
-import { $getTheme } from '@/server/theme'
-import appCss from '@/styles/index.css?url'
-import { cn } from '@/utils/cn'
+import { ThemeProvider } from '@app/components/theme/provider'
+import appCss from '@app/styles/index.css?url'
+import { cn } from '@app/utils/cn'
+import { $getTheme } from '@server/functions/theme'
 import {
   Outlet,
   ScrollRestoration,
