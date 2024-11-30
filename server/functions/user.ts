@@ -1,6 +1,7 @@
 import type { UUID } from '@common/utils/uuid'
 import { db, takeUniqueOrNull } from '@server/db'
 import { usersTable } from '@server/db/schema'
+import { $rateLimitMiddleware } from '@server/middlewares/rate-limit'
 import { $sessionMiddleware } from '@server/middlewares/session'
 import {
   hashPassword,
@@ -39,6 +40,7 @@ const SignUpSchema = z
   })
 
 export const $signUp = createServerFn({ method: 'POST' })
+  .middleware([$rateLimitMiddleware])
   .validator(validate(SignUpSchema, { async: true }))
   .handler(async ({ data }) => {
     const { username, password } = await data
@@ -64,6 +66,7 @@ const SignInSchema = z.object({
 })
 
 export const $signIn = createServerFn({ method: 'POST' })
+  .middleware([$rateLimitMiddleware])
   .validator(validate(SignInSchema))
   .handler(async ({ data: { username, password } }) => {
     const user = await db
