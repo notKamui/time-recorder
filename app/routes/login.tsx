@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@app/components/ui/card'
 import { FormInput } from '@app/components/ui/form-input'
-import { title } from '@app/components/ui/primitives/typography'
+import { link, title } from '@app/components/ui/primitives/typography'
 import { SignInSchema } from '@common/forms/user'
 import { $signIn } from '@server/functions/user'
 import { type FieldApi, useForm } from '@tanstack/react-form'
@@ -74,10 +74,7 @@ function RouteComponent() {
         <CardFooter>
           <p className="mt-4 text-sm">
             Don't have an account?{' '}
-            <Link
-              to="/sign-up"
-              className="text-indigo-600 hover:text-indigo-500"
-            >
+            <Link to="/sign-up" className={link()}>
               Sign up
             </Link>
           </p>

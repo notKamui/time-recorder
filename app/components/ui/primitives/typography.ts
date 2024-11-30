@@ -38,8 +38,9 @@ export const text = cva('', {
 export const link = cva('underline-offset-4 hover:underline', {
   variants: {
     color: {
-      DEFAULT: 'text-primary',
-      secondary: 'text-secondary',
+      DEFAULT: 'text-blue-400 hover:text-blue-500',
+      primary: 'text-primary hover:text-primary/90',
+      secondary: 'text-secondary hover:text-secondary/90',
     },
   },
   defaultVariants: {

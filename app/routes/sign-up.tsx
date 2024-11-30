@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@app/components/ui/card'
 import { FormInput } from '@app/components/ui/form-input'
-import { title } from '@app/components/ui/primitives/typography'
+import { link, title } from '@app/components/ui/primitives/typography'
 import { SignUpSchema } from '@common/forms/user'
 import { $signUp } from '@server/functions/user'
 import { useForm } from '@tanstack/react-form'
@@ -76,7 +76,7 @@ function RouteComponent() {
             <form.Subscribe selector={(state) => state.canSubmit}>
               {(canSubmit) => (
                 <Button type="submit" disabled={!canSubmit} className="mt-6">
-                  Sign Up
+                  Sign up
                 </Button>
               )}
             </form.Subscribe>
@@ -85,8 +85,8 @@ function RouteComponent() {
         <CardFooter>
           <p className="mt-4 text-sm">
             Already have an account?{' '}
-            <Link to="/login" className="text-indigo-600 hover:text-indigo-500">
-              Login
+            <Link to="/login" className={link()}>
+              Log in
             </Link>
           </p>
         </CardFooter>
