@@ -40,7 +40,7 @@
           "fix": "safe",
           "options": {
             "attributes": ["class", "className", "classNames"],
-            "functions": ["cn", "tv", "clsx", "twMerge"]
+            "functions": ["cn", "cva", "clsx", "twMerge"]
           }
         },
         "useComponentExportOnlyModules": {
