@@ -2,17 +2,15 @@
   "name": "time-recorder",
   "type": "module",
   "scripts": {
-    "dev": "bun dev:env -- bunx -b vinxi dev",
-    "build": "bun env -- bunx -b vinxi build",
-    "start": "bun env -- bunx -b vinxi start",
+    "dev": "bunx -b vinxi dev",
+    "build": "bunx -b vinxi build",
+    "start": "bunx -b vinxi start",
     "lint": "bunx biome check",
     "lint:fix": "bunx biome check --write",
     "type-check": "bun tsc --noEmit",
     "check": "bun lint && bun type-check",
-    "dev:db": "bun dev:env -- bunx drizzle-kit",
-    "dev:docker": "docker compose -f docker-compose.dev.yml up -d",
-    "env": "dotenvx run -f .env --",
-    "dev:env": "dotenvx run -f .env.dev -f .env --overload --"
+    "dev:db": "bunx drizzle-kit",
+    "dev:docker": "docker compose -f docker-compose.dev.yml up -d"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

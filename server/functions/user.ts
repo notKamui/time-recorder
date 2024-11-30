@@ -55,7 +55,11 @@ export const $signUp = createServerFn({ method: 'POST' })
   })
 
 const SignInSchema = z.object({
-  username: z.string().trim().min(3).max(32),
+  username: z
+    .string()
+    .trim()
+    .min(3, { message: 'Username must contain at least 3 characters' })
+    .max(32, { message: 'Username must contain at most 32 characters' }),
   password: z.string(),
 })
 
