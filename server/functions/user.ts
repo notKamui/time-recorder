@@ -1,13 +1,10 @@
+import { SignInSchema, SignUpSchema } from '@common/forms/user'
 import type { UUID } from '@common/utils/uuid'
 import { db, takeUniqueOrNull } from '@server/db'
 import { usersTable } from '@server/db/schema'
 import { $rateLimitMiddleware } from '@server/middlewares/rate-limit'
 import { $sessionMiddleware } from '@server/middlewares/session'
-import {
-  hashPassword,
-  verifyPassword,
-  verifyPasswordStrength,
-} from '@server/utils/password'
+import { hashPassword, verifyPassword } from '@server/utils/password'
 import { badRequest } from '@server/utils/response'
 import {
   createSession,
@@ -18,26 +15,6 @@ import { validate } from '@server/utils/validate'
 import { redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 import { eq } from 'drizzle-orm'
-import { z } from 'vinxi'
-
-const SignUpSchema = z
-  .object({
-    username: z
-      .string()
-      .trim()
-      .min(3, { message: 'Username must contain at least 3 characters' })
-      .max(32, { message: 'Username must contain at most 32 characters' }),
-    password: z.string(),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  })
-  .refine(async (data) => await verifyPasswordStrength(data.password), {
-    message: 'Password is too weak',
-    path: ['password'],
-  })
 
 export const $signUp = createServerFn({ method: 'POST' })
   .middleware([$rateLimitMiddleware])
@@ -55,15 +32,6 @@ export const $signUp = createServerFn({ method: 'POST' })
 
     await loginUser(user.id)
   })
-
-const SignInSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .min(3, { message: 'Username must contain at least 3 characters' })
-    .max(32, { message: 'Username must contain at most 32 characters' }),
-  password: z.string(),
-})
 
 export const $signIn = createServerFn({ method: 'POST' })
   .middleware([$rateLimitMiddleware])
