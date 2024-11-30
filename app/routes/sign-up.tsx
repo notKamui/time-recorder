@@ -13,16 +13,6 @@ export const Route = createFileRoute('/sign-up')({
 function RouteComponent() {
   const signUp = useServerFn($signUp)
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const data = Object.fromEntries(new FormData(event.currentTarget)) as {
-      username: string
-      password: string
-      confirmPassword: string
-    }
-    await signUp({ data })
-  }
-
   const form = useForm({
     defaultValues: {
       username: '',
