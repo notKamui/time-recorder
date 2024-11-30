@@ -34,7 +34,7 @@ function RouteComponent() {
   })
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>
@@ -48,7 +48,7 @@ function RouteComponent() {
               event.stopPropagation()
               form.handleSubmit()
             }}
-            className="space-y-4"
+            className="flex flex-col gap-4"
           >
             <FormInput
               type="text"
@@ -83,6 +83,6 @@ function RouteComponent() {
           </p>
         </CardFooter>
       </Card>
-    </>
+    </div>
   )
 }
