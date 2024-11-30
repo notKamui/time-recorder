@@ -1,5 +1,5 @@
 import { tryAsync, tryInline } from '@common/utils/try'
-import { json } from '@tanstack/start'
+import { badRequest } from '@server/utils/response'
 import { ZodError, type ZodSchema, type z } from 'zod'
 
 export function validate<S extends ZodSchema>(
@@ -19,7 +19,7 @@ export function validate<S extends ZodSchema, Data = z.infer<S>>(
   return options?.async
     ? async (data: Data) => {
         const [error, result] = await tryAsync<Data, ZodError>(
-          schema.parse(data),
+          schema.parseAsync(data),
           [ZodError],
         )
         respondIfError(error)
@@ -37,11 +37,5 @@ export function validate<S extends ZodSchema, Data = z.infer<S>>(
 
 function respondIfError(error: ZodError | null) {
   if (!error) return
-  throw json(
-    {
-      message: 'Validation error',
-      errors: error.errors,
-    },
-    { status: 400 },
-  )
+  badRequest('Validation error', 400, { errors: error.errors })
 }

@@ -1,12 +1,12 @@
+import { badRequest } from '@server/utils/response'
 import { createMiddleware } from '@tanstack/start'
-import { getRequestURL, setResponseStatus } from 'vinxi/http'
+import { getRequestURL } from 'vinxi/http'
 
 export const $csrfMiddleware = createMiddleware().server(async ({ next }) => {
   const origin = getRequestURL().origin
 
   if (!origin || !origin.startsWith(process.env.SERVER_URL!)) {
-    setResponseStatus(403)
-    throw new Error('CSRF protection')
+    badRequest('CSRF protection', 403)
   }
   return await next()
 })

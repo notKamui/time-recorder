@@ -7,6 +7,7 @@ import {
   verifyPassword,
   verifyPasswordStrength,
 } from '@server/utils/password'
+import { badRequest } from '@server/utils/response'
 import {
   createSession,
   generateSessionToken,
@@ -17,16 +18,6 @@ import { redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 import { eq } from 'drizzle-orm'
 import { z } from 'vinxi'
-
-async function loginUser(userId: UUID): Promise<never> {
-  const token = generateSessionToken()
-  const session = await createSession(token, userId)
-  setSessionTokenCookie(token, session.expiresAt)
-
-  throw redirect({
-    to: '/app',
-  })
-}
 
 const SignUpSchema = z
   .object({
@@ -58,7 +49,7 @@ export const $signUp = createServerFn({ method: 'POST' })
       .returning({ id: usersTable.id, username: usersTable.username })
       .then(takeUniqueOrNull)
 
-    if (!user) throw new Error('Failed to create user')
+    if (!user) badRequest('User already exists', 400)
 
     await loginUser(user.id)
   })
@@ -78,10 +69,10 @@ export const $signIn = createServerFn({ method: 'POST' })
       .limit(1)
       .then(takeUniqueOrNull)
 
-    if (!user) throw new Error('User not found')
+    if (!user) return await invalidCredentials()
 
     const passwordMatch = await verifyPassword(password, user.hashedPassword)
-    if (!passwordMatch) throw new Error('Invalid password')
+    if (!passwordMatch) return await invalidCredentials()
 
     await loginUser(user.id)
   })
@@ -94,3 +85,19 @@ export const $authenticate = createServerFn({ method: 'GET' })
       user,
     }
   })
+
+async function loginUser(userId: UUID) {
+  const token = generateSessionToken()
+  const session = await createSession(token, userId)
+  setSessionTokenCookie(token, session.expiresAt)
+
+  throw redirect({
+    to: '/app',
+    statusCode: 200,
+  })
+}
+
+async function invalidCredentials(): Promise<never> {
+  await Bun.sleep(1000)
+  badRequest('Invalid credentials', 401)
+}

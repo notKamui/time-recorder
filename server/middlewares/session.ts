@@ -7,25 +7,24 @@ import {
 } from '@server/utils/session'
 import { redirect } from '@tanstack/react-router'
 import { createMiddleware } from '@tanstack/start'
-import { setResponseStatus } from 'vinxi/http'
 
 export const $sessionMiddleware = createMiddleware()
   .middleware([$csrfMiddleware])
   .server(async ({ next }) => {
     const token = getSessionTokenCookie()
     if (!token) {
-      setResponseStatus(401)
       throw redirect({
         to: '/login',
+        statusCode: 401,
       })
     }
 
     const { session, user } = await validateSessionToken(token)
     if (!session) {
       deleteSessionTokenCookie()
-      setResponseStatus(401)
       throw redirect({
         to: '/login',
+        statusCode: 401,
       })
     }
 
