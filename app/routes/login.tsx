@@ -31,6 +31,7 @@ function RouteComponent() {
         <form
           onSubmit={(event) => {
             event.preventDefault()
+            event.stopPropagation()
             form.handleSubmit()
           }}
           className="w-full max-w-sm rounded bg-white p-6 shadow-md"
