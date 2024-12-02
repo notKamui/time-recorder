@@ -6,6 +6,7 @@ import type {
   ReactFormExtendedApi,
   Validator,
 } from '@tanstack/react-form'
+import { AnimatePresence, motion } from 'motion/react'
 import type { ZodType, ZodTypeDef } from 'zod'
 
 export interface FormInputProps<F extends Record<string, any>> {
@@ -45,12 +46,19 @@ export function FormInput<F extends Record<string, any>>({
 }
 
 function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
-  if (!field.state.meta.isTouched || !field.state.meta.errors.length) {
-    return null
-  }
   return (
-    <p className={text({ variant: 'small', color: 'error' })}>
-      {field.state.meta.errors.join(',')}
-    </p>
+    <AnimatePresence>
+      {field.state.meta.isTouched && field.state.meta.errors.length && (
+        <motion.p
+          key={`${field.name}Errors`}
+          exit={{ height: 0, opacity: 0 }}
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          className={text({ variant: 'small', color: 'error' })}
+        >
+          {field.state.meta.errors.join(',')}
+        </motion.p>
+      )}
+    </AnimatePresence>
   )
 }
