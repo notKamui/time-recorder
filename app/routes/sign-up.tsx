@@ -1,3 +1,4 @@
+import { FormInput } from '@app/components/form/form-input'
 import { Button } from '@app/components/ui/button'
 import {
   Card,
@@ -6,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@app/components/ui/card'
-import { FormInput } from '@app/components/ui/form-input'
 import { link, title } from '@app/components/ui/primitives/typography'
 import { SignUpSchema } from '@common/forms/user'
 import { $signUp } from '@server/functions/user'

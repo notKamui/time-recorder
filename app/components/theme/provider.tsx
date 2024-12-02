@@ -1,4 +1,4 @@
-import { ThemeContext } from '@app/hooks/theme'
+import { ThemeContext } from '@app/hooks/use-theme'
 
 export function ThemeProvider({
   children,
