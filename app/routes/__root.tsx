@@ -2,7 +2,9 @@ import { ThemeProvider } from '@app/components/theme/provider'
 import { MainLayout } from '@app/layouts/main'
 import appCss from '@app/styles/index.css?url'
 import { cn } from '@app/utils/cn'
+import { tryAsync } from '@common/utils/try'
 import { $getTheme } from '@server/functions/theme'
+import { $authenticate } from '@server/functions/user'
 import {
   Outlet,
   ScrollRestoration,
@@ -26,12 +28,19 @@ export const Route = createRootRoute({
     ],
     links: [{ rel: 'stylesheet', href: appCss }],
   }),
-  loader: async () => {
+  beforeLoad: async () => {
+    const [error, result] = await tryAsync($authenticate())
+    if (error) {
+      return { session: null, user: null }
+    }
+    return { session: result.session, user: result.user }
+  },
+  loader: async ({ context: { user } }) => {
     const { uiTheme } = await $getTheme()
-    return { uiTheme }
+    return { uiTheme, user }
   },
   component: () => {
-    const { uiTheme } = Route.useLoaderData()
+    const { uiTheme, user } = Route.useLoaderData()
 
     return (
       <html lang="en" className={cn(uiTheme)}>
@@ -40,7 +49,7 @@ export const Route = createRootRoute({
         </head>
         <body>
           <ThemeProvider theme={uiTheme}>
-            <MainLayout>
+            <MainLayout user={user}>
               <Outlet />
             </MainLayout>
           </ThemeProvider>

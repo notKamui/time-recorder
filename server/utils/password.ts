@@ -10,5 +10,5 @@ export async function hashPassword(password: string) {
 }
 
 export async function verifyPassword(password: string, hash: string) {
-  return await verify(password, hash)
+  return await verify(hash, password)
 }

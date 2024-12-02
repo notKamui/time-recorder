@@ -3,7 +3,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -11,46 +10,76 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@app/components/ui/sidebar'
+import type { FileRouteTypes } from '@app/gen/route-tree.gen'
+import type { PublicUser } from '@server/db/schema'
 import { Link } from '@tanstack/react-router'
-import { HomeIcon, LogInIcon } from 'lucide-react'
+import { HomeIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
-const items = [
+type SidebarItem = {
+  title: string
+  url: FileRouteTypes['to']
+  icon: React.ComponentType
+  condition?: (user: PublicUser | null) => boolean
+}
+
+type SidebarSection = {
+  id: string
+  name: string
+  items: SidebarItem[]
+}
+
+const sidebar = [
   {
-    title: 'Home',
-    url: '/',
-    icon: HomeIcon,
+    id: 'main',
+    name: 'Main',
+    items: [{ title: 'Home', url: '/', icon: HomeIcon }] as const,
   },
   {
-    title: 'Login',
-    url: '/login',
-    icon: LogInIcon,
+    id: 'account',
+    name: 'Account',
+    items: [
+      {
+        title: 'Log In',
+        url: '/login',
+        icon: LogInIcon,
+        condition: (user) => !user,
+      },
+      {
+        title: 'Log Out',
+        url: '/logout',
+        icon: LogOutIcon,
+        condition: (user) => !!user,
+      },
+    ] as const,
   },
-] as const
+] satisfies SidebarSection[]
 
-export function AppSidebar() {
+export function AppSidebar({ user }: { user?: PublicUser | null }) {
   return (
     <Sidebar>
       <SidebarHeader>
         <h1 className={title({ h: 2 })}>Time Recorder</h1>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
+        {sidebar.map((section) => (
+          <SidebarGroupContent key={section.id}>
+            <SidebarGroupLabel>{section.name}</SidebarGroupLabel>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {section.items.map((item) =>
+                item.condition?.(user) === false ? null : (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link to={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ),
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        ))}
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>

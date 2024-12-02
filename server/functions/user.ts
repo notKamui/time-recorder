@@ -52,6 +52,16 @@ export const $signIn = createServerFn({ method: 'POST' })
     await loginUser(user.id)
   })
 
+export const $signOut = createServerFn({ method: 'POST' })
+  .middleware([$sessionMiddleware])
+  .handler(async () => {
+    setSessionTokenCookie('', new Date(0))
+    throw redirect({
+      to: '/login',
+      statusCode: 200,
+    })
+  })
+
 export const $authenticate = createServerFn({ method: 'GET' })
   .middleware([$sessionMiddleware])
   .handler(({ context: { session, user } }) => {
@@ -67,7 +77,7 @@ async function loginUser(userId: UUID) {
   setSessionTokenCookie(token, session.expiresAt)
 
   throw redirect({
-    to: '/app',
+    to: '/time',
     statusCode: 200,
   })
 }

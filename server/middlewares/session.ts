@@ -6,7 +6,7 @@ import {
   validateSessionToken,
 } from '@server/utils/session'
 import { redirect } from '@tanstack/react-router'
-import { createMiddleware } from '@tanstack/start'
+import { createMiddleware, json } from '@tanstack/start'
 
 export const $sessionMiddleware = createMiddleware()
   .middleware([$csrfMiddleware])
@@ -22,10 +22,7 @@ export const $sessionMiddleware = createMiddleware()
     const { session, user } = await validateSessionToken(token)
     if (!session) {
       deleteSessionTokenCookie()
-      throw redirect({
-        to: '/login',
-        statusCode: 401,
-      })
+      throw json({ error: 'Invalid session token' }, { status: 401 })
     }
 
     setSessionTokenCookie(token, session.expiresAt)

@@ -8,6 +8,7 @@ export const usersTable = pgTable('users', {
   hashedPassword: varchar({ length: 255 }).notNull(),
 })
 export type User = InferSelectModel<typeof usersTable>
+export type PublicUser = Omit<User, 'hashedPassword'>
 
 export const sessionsTable = pgTable('sessions', {
   id: varchar({ length: 64 }).primaryKey(),
