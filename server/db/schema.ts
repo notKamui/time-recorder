@@ -18,3 +18,15 @@ export const sessionsTable = pgTable('sessions', {
   expiresAt: timestamp({ withTimezone: true, mode: 'date' }).notNull(),
 })
 export type Session = InferSelectModel<typeof sessionsTable>
+
+export const timeEntriesTable = pgTable('time_entries', {
+  id: uuid().primaryKey().defaultRandom().$type<UUID>(),
+  userId: uuid()
+    .notNull()
+    .references(() => usersTable.id)
+    .$type<UUID>(),
+  startedAt: timestamp({ withTimezone: true, mode: 'date' }).notNull(),
+  endedAt: timestamp({ withTimezone: true, mode: 'date' }),
+  description: varchar({ length: 255 }),
+})
+export type TimeEntry = InferSelectModel<typeof timeEntriesTable>
