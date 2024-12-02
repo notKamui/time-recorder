@@ -5,7 +5,7 @@ import { $sessionMiddleware } from '@server/middlewares/session'
 import { validate } from '@server/utils/validate'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
-import { and, eq, gte, isNotNull, lte } from 'drizzle-orm'
+import { and, eq, gte, isNull, lte, or } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
@@ -24,8 +24,10 @@ export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
         and(
           eq(timeEntriesTable.userId, user.id),
           gte(timeEntriesTable.startedAt, dayBegin),
-          isNotNull(timeEntriesTable.endedAt),
-          lte(timeEntriesTable.endedAt, dayEnd),
+          or(
+            isNull(timeEntriesTable.endedAt),
+            lte(timeEntriesTable.endedAt, dayEnd),
+          ),
         ),
       )
 
@@ -34,18 +36,20 @@ export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
 
 export const $createTimeEntry = createServerFn({ method: 'POST' })
   .middleware([$sessionMiddleware, $rateLimitMiddleware])
-  .validator(validate(z.object({ description: z.string() })))
-  .handler(async ({ context: { user }, data: { description } }) => {
+  .validator(validate(z.object({ startedAt: z.date().optional() })))
+  .handler(async ({ context: { user }, data: { startedAt } }) => {
     const timeEntry = await db
       .insert(timeEntriesTable)
       .values({
         userId: user.id,
-        startedAt: new Date(),
-        description,
+        startedAt: startedAt ?? new Date(),
       })
       .returning({ id: timeEntriesTable.id })
+      .then(takeUniqueOrNull)
 
-    return timeEntry
+    if (!timeEntry) throw notFound()
+
+    return timeEntry.id
   })
 
 export const $updateTimeEntry = createServerFn({ method: 'POST' })
@@ -65,6 +69,7 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
       context: { user },
       data: { id, startedAt, endedAt, description },
     }) => {
+      console.log('currentEntryId', id)
       const timeEntry = await db
         .update(timeEntriesTable)
         .set({ startedAt, endedAt, description })
@@ -79,7 +84,7 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
 
       if (!timeEntry) throw notFound()
 
-      return timeEntry
+      return timeEntry.id
     },
   )
 
@@ -97,5 +102,5 @@ export const $deleteTimeEntry = createServerFn({ method: 'POST' })
 
     if (!timeEntry) throw notFound()
 
-    return timeEntry
+    return timeEntry.id
   })

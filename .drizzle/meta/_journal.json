@@ -8,6 +8,13 @@
       "when": 1732892671722,
       "tag": "0000_create_users_and_sessions_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1733174198651,
+      "tag": "0001_create_time_entries_table",
+      "breakpoints": true
     }
   ]
 }
