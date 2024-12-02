@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@app/components/theme/provider'
+import { MainLayout } from '@app/layouts/main'
 import appCss from '@app/styles/index.css?url'
 import { cn } from '@app/utils/cn'
 import { $getTheme } from '@server/functions/theme'
@@ -39,7 +40,9 @@ export const Route = createRootRoute({
         </head>
         <body>
           <ThemeProvider theme={uiTheme}>
-            <Outlet />
+            <MainLayout>
+              <Outlet />
+            </MainLayout>
           </ThemeProvider>
           <ScrollRestoration />
           <Scripts />
