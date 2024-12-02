@@ -77,7 +77,7 @@ async function loginUser(userId: UUID) {
   setSessionTokenCookie(token, session.expiresAt)
 
   throw redirect({
-    to: '/time',
+    to: '/',
     statusCode: 200,
   })
 }
