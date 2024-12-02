@@ -73,6 +73,10 @@ async function loginUser(userId: UUID) {
 }
 
 async function invalidCredentials(): Promise<never> {
-  await Bun.sleep(1000)
+  await sleep(1000)
   badRequest('Invalid credentials', 401)
+}
+
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }

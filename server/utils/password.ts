@@ -1,14 +1,14 @@
-import { sha1 } from '@oslojs/crypto/sha1'
-import { encodeHexLowerCase } from '@oslojs/encoding'
+import { hash, verify } from '@node-rs/argon2'
 
 export async function hashPassword(password: string) {
-  return await Bun.password.hash(password, {
-    algorithm: 'argon2id',
+  return await hash(password, {
     memoryCost: 2 ** 16,
     timeCost: 3,
+    outputLen: 32,
+    parallelism: 1,
   })
 }
 
 export async function verifyPassword(password: string, hash: string) {
-  return await Bun.password.verify(password, hash)
+  return await verify(password, hash)
 }
