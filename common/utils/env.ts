@@ -1,12 +1,5 @@
 import dotenv from '@dotenvx/dotenvx'
 
-if (process.env.NODE_ENV === 'development') {
-  dotenv.config({
-    path: '.env.dev',
-    quiet: true,
-  })
-}
-
 dotenv.config({
   path: '.env',
   override: true,

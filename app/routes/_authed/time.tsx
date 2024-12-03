@@ -1,3 +1,4 @@
+import { DataTable } from '@app/components/data/data-table'
 import { Button } from '@app/components/ui/button'
 import { title } from '@app/components/ui/primitives/typography'
 import type { TimeEntry } from '@server/db/schema'
@@ -7,12 +8,34 @@ import {
   $updateTimeEntry,
 } from '@server/functions/time-entry'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+import type { ColumnDef } from '@tanstack/react-table'
 import { useServerFn } from '@tanstack/start'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+
+const timeTableColumns: ColumnDef<
+  Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
+    startedAt: string
+    endedAt?: string
+  }
+>[] = [
+  {
+    accessorKey: 'startedAt',
+    header: 'Started at',
+  },
+  {
+    accessorKey: 'endedAt',
+    header: 'Ended at',
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+  },
+]
 
 export const Route = createFileRoute('/_authed/time')({
   loader: async () => {
     const entries = await $getTimeEntriesByDay({ data: { date: new Date() } })
+    entries.sort((a, b) => b.startedAt.getTime() - a.startedAt.getTime())
     return { entries }
   },
   component: RouteComponent,
@@ -24,12 +47,8 @@ function RouteComponent() {
   const createTimeEntry = useServerFn($createTimeEntry)
   const updateTimeEntry = useServerFn($updateTimeEntry)
 
-  const sortedEntries = entries.toSorted(
-    (a, b) => b.startedAt.getTime() - a.startedAt.getTime(),
-  )
-
   const [currentEntryId, setCurrentEntryId] = useState<string | null>(() => {
-    const currentEntry = sortedEntries[0]
+    const currentEntry = entries[0]
     if (currentEntry?.endedAt) return null
     return currentEntry?.id ?? null
   })
@@ -47,19 +66,35 @@ function RouteComponent() {
     router.invalidate()
   }
 
+  const mappedEntries = useMemo(() => {
+    return entries.map((entry) => ({
+      ...entry,
+      startedAt: entry.startedAt.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      endedAt: entry.endedAt
+        ? entry.endedAt.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })
+        : undefined
+    }))
+  }, [entries])
+
   return (
     <div>
-      <h2 className={title({ h: 1 })}>Time</h2>
-      {!currentEntryId && <Button onClick={start}>Start</Button>}
-      {currentEntryId && <Button onClick={end}>End</Button>}
-      <ul>
-        {sortedEntries.map((entry: TimeEntry) => (
-          <li key={entry.id}>
-            {entry.description} ({entry.startedAt.toISOString()} -{' '}
-            {entry.endedAt?.toISOString() ?? 'now'})
-          </li>
-        ))}
-      </ul>
+      <h2 className={title({ h: 1 })}>Time recorder</h2>
+      {currentEntryId ? (
+        <Button onClick={end}>End</Button>
+      ) : (
+        <Button onClick={start}>Start</Button>
+      )}
+      <div className="container mx-auto py-10">
+        <DataTable columns={timeTableColumns} data={mappedEntries} />
+      </div>
     </div>
   )
 }

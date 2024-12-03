@@ -37,6 +37,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@tanstack/react-form": "^0.39.0",
     "@tanstack/react-router": "^1.85.0",
+    "@tanstack/react-table": "^8.20.5",
     "@tanstack/start": "^1.85.0",
     "@tanstack/zod-form-adapter": "^0.39.0",
     "class-variance-authority": "^0.7.1",
