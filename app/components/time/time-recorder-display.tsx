@@ -43,8 +43,8 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const { start, end, mappedEntries, currentEntryId } =
     useTimeTableControls(entries)
 
-  const dayBefore = time.shiftDays(-1)
-  const dayAfter = time.shiftDays(1)
+  const dayBefore = time.shift('days', -1)
+  const dayAfter = time.shift('days', 1)
   const isToday = time.isToday()
 
   return (

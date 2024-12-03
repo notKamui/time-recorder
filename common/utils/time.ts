@@ -1,5 +1,7 @@
+type ShiftType = 'days' | 'months' | 'years' | 'hours' | 'minutes' | 'seconds'
+
 export interface Time {
-  shiftDays(days: number): Time
+  shift(type: ShiftType, count: number): Time
   toISOString(): string
   formatDay(): string
   formatTime(): string
@@ -23,9 +25,17 @@ export namespace Time {
       return new Date(_date)
     }
 
-    function shiftDays(days: number): Time {
+    function shift(type: ShiftType, count: number): Time {
       const date = getDate()
-      return from(new Date(date.setDate(date.getDate() + days)))
+      switch (type) {
+        case 'days': return from(new Date(date.setDate(date.getDate() + count)))
+        case 'months': return from(new Date(date.setMonth(date.getMonth() + count)))
+        case 'years': return from(new Date(date.setFullYear(date.getFullYear() + count)))
+        case 'hours': return from(new Date(date.setHours(date.getHours() + count)))
+        case 'minutes': return from(new Date(date.setMinutes(date.getMinutes() + count)))
+        case 'seconds': return from(new Date(date.setSeconds(date.getSeconds() + count)))
+        default: throw new Error('Unknown shift type')
+      }
     }
 
     function toISOString(): string {
@@ -62,7 +72,7 @@ export namespace Time {
     }
 
     return {
-      shiftDays,
+      shift,
       toISOString,
       formatDay,
       formatTime,
