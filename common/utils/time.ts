@@ -1,4 +1,11 @@
-type ShiftType = 'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds' | 'milliseconds'
+type ShiftType =
+  | 'years'
+  | 'months'
+  | 'days'
+  | 'hours'
+  | 'minutes'
+  | 'seconds'
+  | 'milliseconds'
 
 export interface Time {
   shift(type: ShiftType, count: number): Time
@@ -29,14 +36,24 @@ export namespace Time {
     function shift(type: ShiftType, count: number): Time {
       const date = getDate()
       switch (type) {
-        case 'years': return from(new Date(date.setFullYear(date.getFullYear() + count)))
-        case 'months': return from(new Date(date.setMonth(date.getMonth() + count)))
-        case 'days': return from(new Date(date.setDate(date.getDate() + count)))
-        case 'hours': return from(new Date(date.setHours(date.getHours() + count)))
-        case 'minutes': return from(new Date(date.setMinutes(date.getMinutes() + count)))
-        case 'seconds': return from(new Date(date.setSeconds(date.getSeconds() + count)))
-        case 'milliseconds': return from(new Date(date.setMilliseconds(date.getMilliseconds() + count)))
-        default: throw new Error('Unknown shift type')
+        case 'years':
+          return from(new Date(date.setFullYear(date.getFullYear() + count)))
+        case 'months':
+          return from(new Date(date.setMonth(date.getMonth() + count)))
+        case 'days':
+          return from(new Date(date.setDate(date.getDate() + count)))
+        case 'hours':
+          return from(new Date(date.setHours(date.getHours() + count)))
+        case 'minutes':
+          return from(new Date(date.setMinutes(date.getMinutes() + count)))
+        case 'seconds':
+          return from(new Date(date.setSeconds(date.getSeconds() + count)))
+        case 'milliseconds':
+          return from(
+            new Date(date.setMilliseconds(date.getMilliseconds() + count)),
+          )
+        default:
+          throw new Error('Unknown shift type')
       }
     }
 

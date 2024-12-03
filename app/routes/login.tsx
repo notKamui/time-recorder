@@ -8,14 +8,18 @@ import {
   CardTitle,
 } from '@app/components/ui/card'
 import { link, title } from '@app/components/ui/primitives/typography'
+import { crumbs } from '@app/hooks/use-crumbs'
 import { SignInSchema } from '@common/forms/user'
 import { $signIn } from '@server/functions/user'
-import { type FieldApi, useForm } from '@tanstack/react-form'
+import { useForm } from '@tanstack/react-form'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/start'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 
 export const Route = createFileRoute('/login')({
+  loader: () => {
+    return { crumbs: crumbs({ title: 'Login', to: '/login' }) }
+  },
   component: RouteComponent,
 })
 

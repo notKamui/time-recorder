@@ -65,7 +65,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         <h3 className={title({ h: 3 })}>{time.formatDay()}</h3>
         <Button asChild disabled={isToday} className={cn(isToday && 'hidden')}>
           <Link
-            to="/time/$day"
+            to={dayAfter.isToday() ? '/time' : '/time/$day'}
             params={{ day: dayAfter.toISOString() }}
             disabled={isToday}
           >

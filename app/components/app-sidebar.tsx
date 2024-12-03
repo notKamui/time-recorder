@@ -10,14 +10,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@app/components/ui/sidebar'
-import type { FileRouteTypes } from '@app/gen/route-tree.gen'
+import type { FileRoutesByFullPath } from '@app/gen/route-tree.gen'
 import type { PublicUser } from '@server/db/schema'
 import { Link, useLoaderData } from '@tanstack/react-router'
 import { ClockIcon, HomeIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
 type SidebarItem = {
   title: string
-  url: FileRouteTypes['to']
+  url: keyof FileRoutesByFullPath
   icon: React.ComponentType
   condition?: (user: PublicUser | null) => boolean
 }
@@ -68,14 +68,15 @@ const sidebar: SidebarSection[] = [
 ]
 
 export function AppSidebar() {
-  const { user } = useLoaderData({
+  const user = useLoaderData({
     from: '__root__',
     strict: true,
+    select: (state) => state.user,
   })
   return (
     <Sidebar>
       <SidebarHeader>
-        <h1 className={title({ h: 2 })}>Miniverso</h1>
+        <h1 className={title({ h: 1 })}>Miniverso</h1>
       </SidebarHeader>
       <SidebarContent>
         {sidebar.map((section) =>

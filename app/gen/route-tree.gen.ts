@@ -15,9 +15,9 @@ import { Route as SignUpImport } from './../routes/sign-up'
 import { Route as LoginImport } from './../routes/login'
 import { Route as AuthedImport } from './../routes/_authed'
 import { Route as IndexImport } from './../routes/index'
-import { Route as AuthedTimeImport } from './../routes/_authed/time'
 import { Route as AuthedLogoutImport } from './../routes/_authed/logout'
-import { Route as AuthedTimeDayImport } from './../routes/_authed/time_.$day'
+import { Route as AuthedTimeIndexImport } from './../routes/_authed/time/index'
+import { Route as AuthedTimeDayImport } from './../routes/_authed/time/$day'
 
 // Create/Update Routes
 
@@ -44,20 +44,20 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthedTimeRoute = AuthedTimeImport.update({
-  id: '/time',
-  path: '/time',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
 const AuthedLogoutRoute = AuthedLogoutImport.update({
   id: '/logout',
   path: '/logout',
   getParentRoute: () => AuthedRoute,
 } as any)
 
+const AuthedTimeIndexRoute = AuthedTimeIndexImport.update({
+  id: '/time/',
+  path: '/time/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
 const AuthedTimeDayRoute = AuthedTimeDayImport.update({
-  id: '/time_/$day',
+  id: '/time/$day',
   path: '/time/$day',
   getParentRoute: () => AuthedRoute,
 } as any)
@@ -101,18 +101,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedLogoutImport
       parentRoute: typeof AuthedImport
     }
-    '/_authed/time': {
-      id: '/_authed/time'
-      path: '/time'
-      fullPath: '/time'
-      preLoaderRoute: typeof AuthedTimeImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/time_/$day': {
-      id: '/_authed/time_/$day'
+    '/_authed/time/$day': {
+      id: '/_authed/time/$day'
       path: '/time/$day'
       fullPath: '/time/$day'
       preLoaderRoute: typeof AuthedTimeDayImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/time/': {
+      id: '/_authed/time/'
+      path: '/time'
+      fullPath: '/time'
+      preLoaderRoute: typeof AuthedTimeIndexImport
       parentRoute: typeof AuthedImport
     }
   }
@@ -122,14 +122,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthedRouteChildren {
   AuthedLogoutRoute: typeof AuthedLogoutRoute
-  AuthedTimeRoute: typeof AuthedTimeRoute
   AuthedTimeDayRoute: typeof AuthedTimeDayRoute
+  AuthedTimeIndexRoute: typeof AuthedTimeIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedLogoutRoute: AuthedLogoutRoute,
-  AuthedTimeRoute: AuthedTimeRoute,
   AuthedTimeDayRoute: AuthedTimeDayRoute,
+  AuthedTimeIndexRoute: AuthedTimeIndexRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -141,8 +141,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/sign-up': typeof SignUpRoute
   '/logout': typeof AuthedLogoutRoute
-  '/time': typeof AuthedTimeRoute
   '/time/$day': typeof AuthedTimeDayRoute
+  '/time': typeof AuthedTimeIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -151,8 +151,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/sign-up': typeof SignUpRoute
   '/logout': typeof AuthedLogoutRoute
-  '/time': typeof AuthedTimeRoute
   '/time/$day': typeof AuthedTimeDayRoute
+  '/time': typeof AuthedTimeIndexRoute
 }
 
 export interface FileRoutesById {
@@ -162,8 +162,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/sign-up': typeof SignUpRoute
   '/_authed/logout': typeof AuthedLogoutRoute
-  '/_authed/time': typeof AuthedTimeRoute
-  '/_authed/time_/$day': typeof AuthedTimeDayRoute
+  '/_authed/time/$day': typeof AuthedTimeDayRoute
+  '/_authed/time/': typeof AuthedTimeIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -174,10 +174,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/sign-up'
     | '/logout'
-    | '/time'
     | '/time/$day'
+    | '/time'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/sign-up' | '/logout' | '/time' | '/time/$day'
+  to: '/' | '' | '/login' | '/sign-up' | '/logout' | '/time/$day' | '/time'
   id:
     | '__root__'
     | '/'
@@ -185,8 +185,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/sign-up'
     | '/_authed/logout'
-    | '/_authed/time'
-    | '/_authed/time_/$day'
+    | '/_authed/time/$day'
+    | '/_authed/time/'
   fileRoutesById: FileRoutesById
 }
 
@@ -227,8 +227,8 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/logout",
-        "/_authed/time",
-        "/_authed/time_/$day"
+        "/_authed/time/$day",
+        "/_authed/time/"
       ]
     },
     "/login": {
@@ -241,12 +241,12 @@ export const routeTree = rootRoute
       "filePath": "_authed/logout.tsx",
       "parent": "/_authed"
     },
-    "/_authed/time": {
-      "filePath": "_authed/time.tsx",
+    "/_authed/time/$day": {
+      "filePath": "_authed/time/$day.tsx",
       "parent": "/_authed"
     },
-    "/_authed/time_/$day": {
-      "filePath": "_authed/time_.$day.tsx",
+    "/_authed/time/": {
+      "filePath": "_authed/time/index.tsx",
       "parent": "/_authed"
     }
   }

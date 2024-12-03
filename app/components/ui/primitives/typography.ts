@@ -4,7 +4,7 @@ export const title = cva('scroll-m-20 tracking-tight', {
   variants: {
     h: {
       1: 'font-extrabold text-4xl lg:text-5xl',
-      2: 'border-b-2 pb-2 font-semibold text-3xl first:mt-0',
+      2: 'font-semibold text-3xl first:mt-0',
       3: 'font-semibold text-2xl',
       4: 'font-semibold text-xl',
     },

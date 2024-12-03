@@ -52,7 +52,10 @@ export const TimeRecorderControls = forwardRef<
   const { start, end, currentEntryId } = useTimeTableControls(entries)
 
   return (
-    <div ref={elementRef} className={cn('container rounded-md border', className)}>
+    <div
+      ref={elementRef}
+      className={cn('container rounded-md border', className)}
+    >
       {currentEntryId ? (
         <Button onClick={end}>End</Button>
       ) : (

@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@app/components/theme/provider'
+import { crumbs } from '@app/hooks/use-crumbs'
 import { MainLayout } from '@app/layouts/main'
 import appCss from '@app/styles/index.css?url'
 import { cn } from '@app/utils/cn'
@@ -11,6 +12,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { Meta, Scripts } from '@tanstack/start'
+import { outdent } from 'outdent'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -27,6 +29,19 @@ export const Route = createRootRoute({
       },
     ],
     links: [{ rel: 'stylesheet', href: appCss }],
+    scripts: import.meta.env.PROD
+      ? []
+      : [
+          {
+            type: 'module',
+            children: outdent /* js */`
+              import RefreshRuntime from "/_build/@react-refresh"
+              RefreshRuntime.injectIntoGlobalHook(window)
+              window.$RefreshReg$ = () => {}
+              window.$RefreshSig$ = () => (type) => type
+            `,
+          },
+        ],
   }),
   beforeLoad: async () => {
     const [error, result] = await tryAsync($authenticate())
@@ -37,10 +52,10 @@ export const Route = createRootRoute({
   },
   loader: async ({ context: { user } }) => {
     const { uiTheme } = await $getTheme()
-    return { uiTheme, user }
+    return { uiTheme, user, crumbs: crumbs({ title: 'Home', to: '/' }) }
   },
   component: () => {
-    const { uiTheme } = Route.useLoaderData()
+    const uiTheme = Route.useLoaderData({ select: (state) => state.uiTheme })
 
     return (
       <html lang="en" className={cn(uiTheme)}>

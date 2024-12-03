@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@app/components/ui/card'
 import { link, title } from '@app/components/ui/primitives/typography'
+import { crumbs } from '@app/hooks/use-crumbs'
 import { SignUpSchema } from '@common/forms/user'
 import { $signUp } from '@server/functions/user'
 import { useForm } from '@tanstack/react-form'
@@ -16,6 +17,9 @@ import { useServerFn } from '@tanstack/start'
 import { zodValidator } from '@tanstack/zod-form-adapter'
 
 export const Route = createFileRoute('/sign-up')({
+  loader: () => {
+    return { crumbs: crumbs({ title: 'Sign up', to: '/sign-up' }) }
+  },
   component: RouteComponent,
 })
 
