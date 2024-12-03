@@ -1,7 +1,8 @@
-type ShiftType = 'days' | 'months' | 'years' | 'hours' | 'minutes' | 'seconds'
+type ShiftType = 'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds' | 'milliseconds'
 
 export interface Time {
   shift(type: ShiftType, count: number): Time
+  compare(other: Time, type?: ShiftType): number
   toISOString(): string
   formatDay(): string
   formatTime(): string
@@ -28,14 +29,55 @@ export namespace Time {
     function shift(type: ShiftType, count: number): Time {
       const date = getDate()
       switch (type) {
-        case 'days': return from(new Date(date.setDate(date.getDate() + count)))
-        case 'months': return from(new Date(date.setMonth(date.getMonth() + count)))
         case 'years': return from(new Date(date.setFullYear(date.getFullYear() + count)))
+        case 'months': return from(new Date(date.setMonth(date.getMonth() + count)))
+        case 'days': return from(new Date(date.setDate(date.getDate() + count)))
         case 'hours': return from(new Date(date.setHours(date.getHours() + count)))
         case 'minutes': return from(new Date(date.setMinutes(date.getMinutes() + count)))
         case 'seconds': return from(new Date(date.setSeconds(date.getSeconds() + count)))
+        case 'milliseconds': return from(new Date(date.setMilliseconds(date.getMilliseconds() + count)))
         default: throw new Error('Unknown shift type')
       }
+    }
+
+    function compare(other: Time, type: ShiftType = 'milliseconds'): number {
+      const date = getDate()
+      const otherDate = other.getDate()
+      switch (type) {
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: Fallthrough is intended
+        case 'years': {
+          date.setMonth(0)
+          otherDate.setMonth(0)
+        }
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: Fallthrough is intended
+        case 'months': {
+          date.setDate(0)
+          otherDate.setDate(0)
+        }
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: Fallthrough is intended
+        case 'days': {
+          date.setHours(0)
+          otherDate.setHours(0)
+        }
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: Fallthrough is intended
+        case 'hours': {
+          date.setMinutes(0)
+          otherDate.setMinutes(0)
+        }
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: Fallthrough is intended
+        case 'minutes': {
+          date.setSeconds(0)
+          otherDate.setSeconds(0)
+        }
+        // biome-ignore lint/suspicious/noFallthroughSwitchClause: Fallthrough is intended
+        case 'seconds': {
+          date.setMilliseconds(0)
+          otherDate.setMilliseconds(0)
+        }
+        case 'milliseconds':
+          break
+      }
+      return date.getTime() - otherDate.getTime()
     }
 
     function toISOString(): string {
@@ -73,6 +115,7 @@ export namespace Time {
 
     return {
       shift,
+      compare,
       toISOString,
       formatDay,
       formatTime,

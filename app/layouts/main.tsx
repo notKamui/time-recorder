@@ -6,7 +6,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="size-full">
+      <main className="size-full p-4">
         <SidebarTrigger />
         {children}
       </main>

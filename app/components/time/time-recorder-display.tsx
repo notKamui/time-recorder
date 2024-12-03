@@ -12,20 +12,23 @@ import { Link, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useServerFn } from '@tanstack/start'
 import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   startedAt: string
   endedAt?: string
 }
 
-const timeTableColumns: ColumnDef<TimeTableData>[] = [
+const timeTableColumns: ColumnDef<TimeEntry>[] = [
   {
     accessorKey: 'startedAt',
+    accessorFn: (row) => Time.from(row.startedAt).formatTime(),
     header: 'Started at',
   },
   {
     accessorKey: 'endedAt',
+    accessorFn: (row) =>
+      row.endedAt ? Time.from(row.endedAt).formatTime() : 'Now',
     header: 'Ended at',
   },
   {
@@ -40,7 +43,7 @@ type RecorderDisplayProps = {
 }
 
 export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
-  const { start, end, mappedEntries, currentEntryId } =
+  const { start, end, currentEntryId } =
     useTimeTableControls(entries)
 
   const dayBefore = time.shift('days', -1)
@@ -48,7 +51,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const isToday = time.isToday()
 
   return (
-    <>
+    <div className="flex size-full flex-col gap-4">
       <div className="flex flex-row gap-2">
         <Button asChild>
           <Link
@@ -69,16 +72,20 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           </Link>
         </Button>
       </div>
-      {isToday &&
-        (currentEntryId ? (
-          <Button onClick={end}>End</Button>
-        ) : (
-          <Button onClick={start}>Start</Button>
-        ))}
-      <div className="container mx-auto py-10">
-        <DataTable columns={timeTableColumns} data={mappedEntries} />
+      <div className="flex flex-col-reverse gap-4 lg:flex-row">
+        <div className="container flex-grow">
+          <DataTable columns={timeTableColumns} data={entries} />
+        </div>
+        <div className="container max-w-md rounded-md border">
+          {isToday &&
+            (currentEntryId ? (
+              <Button onClick={end}>End</Button>
+            ) : (
+              <Button onClick={start}>Start</Button>
+            ))}
+        </div>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -106,20 +113,9 @@ function useTimeTableControls(entries: TimeEntry[]) {
     router.invalidate()
   }
 
-  const mappedEntries = useMemo(() => {
-    return entries.map((entry) => ({
-      ...entry,
-      startedAt: Time.from(entry.startedAt).formatTime(),
-      endedAt: entry.endedAt
-        ? Time.from(entry.endedAt).formatTime()
-        : undefined,
-    }))
-  }, [entries])
-
   return {
     start,
     end,
     currentEntryId,
-    mappedEntries,
   }
 }
