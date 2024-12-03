@@ -2,6 +2,7 @@ export interface Time {
   shiftDays(days: number): Time
   toISOString(): string
   formatDay(): string
+  formatTime(): string
   isToday(): boolean
   getDate(): Date
 }
@@ -12,7 +13,11 @@ export namespace Time {
   }
 
   export function from(date: Date | string): Time {
-    const _date = date ? new Date(date) : new Date()
+    const _date = date
+      ? typeof date === 'string'
+        ? new Date(date)
+        : date
+      : new Date()
 
     function getDate(): Date {
       return new Date(_date)
@@ -24,22 +29,23 @@ export namespace Time {
     }
 
     function toISOString(): string {
-      return _date.toISOString()
+      return getDate().toISOString()
     }
 
     function isToday(): boolean {
       const today = new Date()
+      const date = getDate()
       return (
-        _date.getDate() === today.getDate() &&
-        _date.getMonth() === today.getMonth() &&
-        _date.getFullYear() === today.getFullYear()
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
       )
     }
 
     function formatDay(): string {
       return isToday()
         ? 'Today'
-        : _date.toLocaleDateString([], {
+        : getDate().toLocaleDateString([], {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -47,14 +53,21 @@ export namespace Time {
           })
     }
 
+    function formatTime(): string {
+      return getDate().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+    }
+
     return {
       shiftDays,
       toISOString,
       formatDay,
+      formatTime,
       isToday,
       getDate,
     }
   }
 }
-
-

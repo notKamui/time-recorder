@@ -109,9 +109,9 @@ function useTimeTableControls(entries: TimeEntry[]) {
   const mappedEntries = useMemo(() => {
     return entries.map((entry) => ({
       ...entry,
-      startedAt: Time.from(entry.startedAt).toISOString(),
+      startedAt: Time.from(entry.startedAt).formatTime(),
       endedAt: entry.endedAt
-        ? Time.from(entry.endedAt).toISOString()
+        ? Time.from(entry.endedAt).formatTime()
         : undefined,
     }))
   }, [entries])

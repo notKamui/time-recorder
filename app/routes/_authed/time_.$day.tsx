@@ -1,4 +1,4 @@
-import { RecorderDisplay } from '@app/components/time/recorder-display'
+import { RecorderDisplay } from '@app/components/time/time-recorder-display'
 import { title } from '@app/components/ui/primitives/typography'
 import { Time } from '@common/utils/time'
 import {
