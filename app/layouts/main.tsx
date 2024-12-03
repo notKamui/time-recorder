@@ -12,7 +12,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@app/components/ui/sidebar'
-import { useCrumbs } from '@app/hooks/use-crumbs'
+import { type Crumb, useCrumbs } from '@app/hooks/use-crumbs'
 import { Separator } from '@radix-ui/react-separator'
 import { Link } from '@tanstack/react-router'
 import { Fragment, type ReactNode } from 'react'
@@ -29,21 +29,12 @@ export function MainLayout({ children }: { children: ReactNode }) {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              {breadcrumbs.map((breadcrumb, index) => (
-                <>
-                  <BreadcrumbItem key={breadcrumb.title}>
-                    {breadcrumb.to && index < breadcrumbs.length - 1 ? (
-                      <BreadcrumbLink asChild>
-                        <Link to={breadcrumb.to}>{breadcrumb.title}</Link>
-                      </BreadcrumbLink>
-                    ) : (
-                      <BreadcrumbPage>{breadcrumb.title}</BreadcrumbPage>
-                    )}
-                  </BreadcrumbItem>
-                  {index < breadcrumbs.length - 1 && (
-                    <BreadcrumbSeparator key={index} className="hidden md:block" />
-                  )}
-                </>
+              {breadcrumbs.map((crumb, index) => (
+                <CrumbLink
+                  key={crumb.title}
+                  crumb={crumb}
+                  last={index === breadcrumbs.length - 1}
+                />
               ))}
             </BreadcrumbList>
           </Breadcrumb>
@@ -51,5 +42,22 @@ export function MainLayout({ children }: { children: ReactNode }) {
         <main className="size-full p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
+  )
+}
+
+function CrumbLink({ crumb, last }: { crumb: Crumb; last: boolean }) {
+  return (
+    <>
+      <BreadcrumbItem>
+        {crumb.to && !last ? (
+          <BreadcrumbLink asChild>
+            <Link to={crumb.to}>{crumb.title}</Link>
+          </BreadcrumbLink>
+        ) : (
+          <BreadcrumbPage>{crumb.title}</BreadcrumbPage>
+        )}
+      </BreadcrumbItem>
+      {!last && <BreadcrumbSeparator className="hidden md:block" />}
+    </>
   )
 }
