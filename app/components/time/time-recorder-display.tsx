@@ -43,8 +43,6 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const dayAfter = time.shift('days', 1)
   const isToday = time.isToday()
 
-  const MotionTimeRecorderControls = motion.create(TimeRecorderControls)
-
   return (
     <div className="flex size-full flex-col gap-4">
       <div className="flex flex-row gap-2">
