@@ -40,7 +40,7 @@ export const Route = createRootRoute({
     return { uiTheme, user }
   },
   component: () => {
-    const { uiTheme, user } = Route.useLoaderData()
+    const { uiTheme } = Route.useLoaderData()
 
     return (
       <html lang="en" className={cn(uiTheme)}>
@@ -49,7 +49,7 @@ export const Route = createRootRoute({
         </head>
         <body>
           <ThemeProvider theme={uiTheme}>
-            <MainLayout user={user}>
+            <MainLayout>
               <Outlet />
             </MainLayout>
           </ThemeProvider>

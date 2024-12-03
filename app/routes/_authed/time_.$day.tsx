@@ -10,9 +10,9 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/start'
 import { useMemo, useState } from 'react'
 
-export const Route = createFileRoute('/_authed/time')({
-  loader: async () => {
-    const time = Time.now()
+export const Route = createFileRoute('/_authed/time_/$day')({
+  loader: async ({ params: { day } }) => {
+    const time = Time.from(day)
     const entries = await $getTimeEntriesByDay({
       data: { date: time.getDate() },
     })
@@ -65,8 +65,6 @@ function RouteComponent() {
         : undefined,
     }))
   }, [entries])
-
-  console.log('BBB')
 
   return (
     <div>

@@ -1,15 +1,11 @@
 import { AppSidebar } from '@app/components/app-sidebar'
 import { SidebarProvider, SidebarTrigger } from '@app/components/ui/sidebar'
-import type { PublicUser } from '@server/db/schema'
 import type { ReactNode } from 'react'
 
-export function MainLayout({
-  children,
-  user,
-}: { children: ReactNode; user: PublicUser | null }) {
+export function MainLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
-      <AppSidebar user={user} />
+      <AppSidebar />
       <main>
         <SidebarTrigger />
         {children}

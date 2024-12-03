@@ -12,7 +12,7 @@ import {
 } from '@app/components/ui/sidebar'
 import type { FileRouteTypes } from '@app/gen/route-tree.gen'
 import type { PublicUser } from '@server/db/schema'
-import { Link } from '@tanstack/react-router'
+import { Link, useLoaderData } from '@tanstack/react-router'
 import { ClockIcon, HomeIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
 type SidebarItem = {
@@ -67,7 +67,11 @@ const sidebar: SidebarSection[] = [
   },
 ]
 
-export function AppSidebar({ user }: { user: PublicUser | null }) {
+export function AppSidebar() {
+  const { user } = useLoaderData({
+    from: '__root__',
+    strict: true,
+  })
   return (
     <Sidebar>
       <SidebarHeader>
