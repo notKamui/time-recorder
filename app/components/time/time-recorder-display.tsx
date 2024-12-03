@@ -14,6 +14,11 @@ export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   endedAt?: string
 }
 
+type RecorderDisplayProps = {
+  time: Time
+  entries: TimeEntry[]
+}
+
 const timeTableColumns: ColumnDef<TimeEntry>[] = [
   {
     accessorKey: 'startedAt',
@@ -23,7 +28,7 @@ const timeTableColumns: ColumnDef<TimeEntry>[] = [
   {
     accessorKey: 'endedAt',
     accessorFn: (row) =>
-      row.endedAt ? Time.from(row.endedAt).formatTime() : 'Now',
+      row.endedAt ? Time.from(row.endedAt).formatTime() : null,
     header: 'Ended at',
   },
   {
@@ -31,11 +36,6 @@ const timeTableColumns: ColumnDef<TimeEntry>[] = [
     header: 'Description',
   },
 ]
-
-type RecorderDisplayProps = {
-  time: Time
-  entries: TimeEntry[]
-}
 
 export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const dayBefore = time.shift('days', -1)
@@ -75,7 +75,10 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           <DataTable columns={timeTableColumns} data={entries} />
         </div>
         {isToday && (
-          <TimeRecorderControls className="h-min max-w-md" entries={entries} />
+          <TimeRecorderControls
+            className="max-h-96 min-h-96 max-w-md"
+            entries={entries}
+          />
         )}
       </div>
     </div>

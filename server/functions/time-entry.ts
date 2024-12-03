@@ -44,12 +44,12 @@ export const $createTimeEntry = createServerFn({ method: 'POST' })
         userId: user.id,
         startedAt: startedAt ?? new Date(),
       })
-      .returning({ id: timeEntriesTable.id })
+      .returning()
       .then(takeUniqueOrNull)
 
     if (!timeEntry) throw notFound()
 
-    return timeEntry.id
+    return timeEntry
   })
 
 export const $updateTimeEntry = createServerFn({ method: 'POST' })
@@ -78,12 +78,12 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
             eq(timeEntriesTable.userId, user.id),
           ),
         )
-        .returning({ id: timeEntriesTable.id })
+        .returning()
         .then(takeUniqueOrNull)
 
       if (!timeEntry) throw notFound()
 
-      return timeEntry.id
+      return timeEntry
     },
   )
 

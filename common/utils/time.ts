@@ -11,8 +11,9 @@ export interface Time {
   shift(type: ShiftType, count: number): Time
   compare(other: Time, type?: ShiftType): number
   toISOString(): string
-  formatDay(): string
+  formatDay(options?: { short: boolean }): string
   formatTime(): string
+  formatDiff(other: Time): string
   isToday(): boolean
   getDate(): Date
 }
@@ -113,15 +114,22 @@ export namespace Time {
       )
     }
 
-    function formatDay(): string {
+    function formatDay(options?: { short?: boolean }): string {
       return isToday()
         ? 'Today'
-        : getDate().toLocaleDateString(['en'], {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })
+        : options?.short
+          ? getDate().toLocaleDateString(['en'], {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          : getDate().toLocaleDateString(['en'], {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
     }
 
     function formatTime(): string {
@@ -132,12 +140,25 @@ export namespace Time {
       })
     }
 
+    // HH:MM:SS
+    function formatDiff(other: Time): string {
+      const diff = Math.abs(compare(other, 'milliseconds'))
+      const hours = Math.floor(diff / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+        2,
+        '0',
+      )}:${String(seconds).padStart(2, '0')}`
+    }
+
     return {
       shift,
       compare,
       toISOString,
       formatDay,
       formatTime,
+      formatDiff,
       isToday,
       getDate,
     }

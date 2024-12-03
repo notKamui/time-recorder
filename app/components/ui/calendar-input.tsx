@@ -24,7 +24,7 @@ export function CalendarInput({ value, onChange }: CalendarFormProps) {
           <Button
             variant={'outline'}
             className={cn(
-              'w-[280px] pl-3 text-left font-normal',
+              'w-[280px] pl-3 text-left font-normal max-sm:flex-grow',
               !value && 'text-muted-foreground',
             )}
           >

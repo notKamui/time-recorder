@@ -1,5 +1,9 @@
 import { Button } from '@app/components/ui/button'
+import { title } from '@app/components/ui/primitives/typography'
+import { Textarea } from '@app/components/ui/textarea'
+import { useNow } from '@app/hooks/use-now'
 import { cn } from '@app/utils/cn'
+import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
 import {
   $createTimeEntry,
@@ -19,29 +23,36 @@ function useTimeTableControls(entries: TimeRecorderControlsProps['entries']) {
   const createTimeEntry = useServerFn($createTimeEntry)
   const updateTimeEntry = useServerFn($updateTimeEntry)
 
-  const [currentEntryId, setCurrentEntryId] = useState<string | null>(() => {
-    const currentEntry = entries[0]
-    if (currentEntry?.endedAt) return null
-    return currentEntry?.id ?? null
+  const [currentEntry, setCurrentEntry] = useState<TimeEntry | null>(() => {
+    const lastEntry = entries[0]
+    if (lastEntry?.endedAt) return null
+    return lastEntry ?? null
   })
 
   async function start() {
-    const entryId = await createTimeEntry({ data: {} })
-    setCurrentEntryId(entryId)
+    const entry = await createTimeEntry({ data: {} })
+    setCurrentEntry(entry)
     router.invalidate()
   }
 
-  async function end() {
-    if (!currentEntryId) return
-    await updateTimeEntry({ data: { id: currentEntryId, endedAt: new Date() } })
-    setCurrentEntryId(null)
+  async function end(description: string) {
+    if (!currentEntry) return
+    const trimmedDescription = description.trim()
+    await updateTimeEntry({
+      data: {
+        id: currentEntry.id,
+        endedAt: new Date(),
+        description: trimmedDescription.length ? trimmedDescription : undefined,
+      },
+    })
+    setCurrentEntry(null)
     router.invalidate()
   }
 
   return {
     start,
     end,
-    currentEntryId,
+    currentEntry,
   }
 }
 
@@ -49,17 +60,47 @@ export const TimeRecorderControls = forwardRef<
   HTMLDivElement,
   TimeRecorderControlsProps
 >(({ entries, className }, elementRef) => {
-  const { start, end, currentEntryId } = useTimeTableControls(entries)
+  const { start, end, currentEntry } = useTimeTableControls(entries)
+  const now = useNow()
+  const currentStart = currentEntry ? Time.from(currentEntry.startedAt) : null
+
+  const [description, setDescription] = useState<string>('')
+
+  async function onStart() {
+    await start()
+  }
+
+  async function onEnd() {
+    await end(description)
+    setDescription('')
+  }
 
   return (
     <div
       ref={elementRef}
-      className={cn('container rounded-md border', className)}
+      className={cn(
+        'container flex flex-col gap-4 rounded-md border p-4',
+        className,
+      )}
     >
-      {currentEntryId ? (
-        <Button onClick={end}>End</Button>
+      <div className="space-x-2">
+        <span className={title({ h: 4 })}>Elapsed time:</span>
+        {currentStart ? (
+          <span>{currentStart.formatDiff(now)}</span>
+        ) : (
+          <span>00:00:00</span>
+        )}
+      </div>
+      <Textarea
+        className="flex-grow resize-none"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Description"
+      />
+      {currentEntry ? (
+        <Button onClick={onEnd}>End</Button>
       ) : (
-        <Button onClick={start}>Start</Button>
+        <Button onClick={onStart}>Start</Button>
       )}
     </div>
   )
