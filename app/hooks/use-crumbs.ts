@@ -1,5 +1,5 @@
-import type { FileRoutesByTo } from "@app/gen/route-tree.gen"
-import { isMatch, useMatches } from "@tanstack/react-router";
+import type { FileRoutesByTo } from '@app/gen/route-tree.gen'
+import { isMatch, useMatches } from '@tanstack/react-router'
 
 export type Crumb = {
   title: string
@@ -12,8 +12,8 @@ export function crumbs(...crumbs: Crumb[]) {
 
 export function useCrumbs() {
   return useMatches()
-    .filter(match => isMatch(match, 'loaderData.crumbs'))
-    .map(match => match.loaderData?.crumbs)
-    .filter(match => match?.length)
+    .filter((match) => isMatch(match, 'loaderData.crumbs'))
+    .map((match) => match.loaderData?.crumbs)
+    .filter((match) => match?.length)
     .flat() as Crumb[]
 }

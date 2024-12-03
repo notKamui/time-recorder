@@ -5,16 +5,10 @@ import { title } from '@app/components/ui/primitives/typography'
 import { cn } from '@app/utils/cn'
 import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
-import {
-  $createTimeEntry,
-  $updateTimeEntry,
-} from '@server/functions/time-entry'
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useServerFn } from '@tanstack/start'
 import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
+import { motion } from 'motion/react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   startedAt: string
@@ -77,17 +71,9 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         <div className="container flex-grow">
           <DataTable columns={timeTableColumns} data={entries} />
         </div>
-        <AnimatePresence>
-          {isToday && (
-            <MotionTimeRecorderControls
-              className="h-min max-w-md"
-              initial={{ opacity: 0, maxWidth: 0 }}
-              animate={{ opacity: 1, maxWidth: '28rem' }}
-              exit={{ opacity: 0, maxWidth: 0 }}
-              entries={entries}
-            />
-          )}
-        </AnimatePresence>
+        {isToday && (
+          <TimeRecorderControls className="h-min max-w-md" entries={entries} />
+        )}
       </div>
     </div>
   )
