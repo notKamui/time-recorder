@@ -8,7 +8,6 @@ import type { TimeEntry } from '@server/db/schema'
 import { Link } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react'
-import { motion } from 'motion/react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   startedAt: string

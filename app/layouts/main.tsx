@@ -15,7 +15,7 @@ import {
 import { type Crumb, useCrumbs } from '@app/hooks/use-crumbs'
 import { Separator } from '@radix-ui/react-separator'
 import { Link } from '@tanstack/react-router'
-import { Fragment, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export function MainLayout({ children }: { children: ReactNode }) {
   const breadcrumbs = useCrumbs()
