@@ -69,7 +69,6 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
       context: { user },
       data: { id, startedAt, endedAt, description },
     }) => {
-      console.log('currentEntryId', id)
       const timeEntry = await db
         .update(timeEntriesTable)
         .set({ startedAt, endedAt, description })
