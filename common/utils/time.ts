@@ -22,7 +22,9 @@ export namespace Time {
     return from(new Date())
   }
 
-  export function from(date: Date | string): Time {
+  export function from(date: Date | string | null | undefined): Time {
+    if (date === null || date === undefined) return now()
+
     const _date = date
       ? typeof date === 'string'
         ? new Date(date)

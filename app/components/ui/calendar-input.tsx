@@ -16,7 +16,7 @@ export type CalendarFormProps = {
   onChange: (date?: Date) => void
 }
 
-export function CalendarForm({ value, onChange }: CalendarFormProps) {
+export function CalendarInput({ value, onChange }: CalendarFormProps) {
   return (
     <>
       <Popover>
@@ -24,7 +24,7 @@ export function CalendarForm({ value, onChange }: CalendarFormProps) {
           <Button
             variant={'outline'}
             className={cn(
-              'w-[240px] pl-3 text-left font-normal',
+              'w-[280px] pl-3 text-left font-normal',
               !value && 'text-muted-foreground',
             )}
           >

@@ -1,11 +1,11 @@
 import { DataTable } from '@app/components/data/data-table'
 import { TimeRecorderControls } from '@app/components/time/time-recorder-controls'
 import { Button } from '@app/components/ui/button'
-import { title } from '@app/components/ui/primitives/typography'
+import { CalendarInput } from '@app/components/ui/calendar-input'
 import { cn } from '@app/utils/cn'
 import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
-import { Link } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react'
 
@@ -42,26 +42,32 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const dayAfter = time.shift('days', 1)
   const isToday = time.isToday()
 
+  const router = useRouter()
+  function onDateChange(time: Time) {
+    if (time.isToday()) return router.navigate({ to: '/time' })
+    router.navigate({
+      to: '/time/$day',
+      params: { day: time.toISOString() },
+    })
+  }
+
   return (
     <div className="flex size-full flex-col gap-4">
       <div className="flex flex-row gap-2">
-        <Button asChild>
-          <Link
-            to={dayBefore.isToday() ? '/time' : '/time/$day'}
-            params={{ day: dayBefore.toISOString() }}
-          >
-            <ChevronsLeftIcon />
-          </Link>
+        <Button onClick={() => onDateChange(dayBefore)}>
+          <ChevronsLeftIcon />
         </Button>
-        <h3 className={title({ h: 3 })}>{time.formatDay()}</h3>
-        <Button asChild disabled={isToday} className={cn(isToday && 'hidden')}>
-          <Link
-            to={dayAfter.isToday() ? '/time' : '/time/$day'}
-            params={{ day: dayAfter.toISOString() }}
-            disabled={isToday}
-          >
-            <ChevronsRightIcon />
-          </Link>
+        <CalendarInput
+          value={time.getDate()}
+          onChange={(date) => onDateChange(Time.from(date))}
+        />
+        <h3 className="sr-only">{time.formatDay()}</h3>
+        <Button
+          onClick={() => onDateChange(dayAfter)}
+          disabled={isToday}
+          className={cn(isToday && 'hidden')}
+        >
+          <ChevronsRightIcon />
         </Button>
       </div>
       <div className="flex flex-col-reverse gap-4 lg:flex-row">
