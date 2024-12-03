@@ -104,9 +104,7 @@ function Header() {
 function Footer() {
   return (
     <SidebarFooter>
-      <div>
-        <ThemeToggle />
-      </div>
+      <ThemeToggle />
     </SidebarFooter>
   )
 }
