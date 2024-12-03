@@ -2,6 +2,7 @@ import {
   AppNavGroup,
   type AppNavGroupProps,
 } from '@app/components/nav/app-nav-group'
+import { ThemeToggle } from '@app/components/theme/toggle'
 import { title } from '@app/components/ui/primitives/typography'
 import {
   Sidebar,
@@ -70,7 +71,7 @@ export function AppSidebar() {
           <AppNavGroup key={section.title} {...section} />
         ))}
       </SidebarContent>
-      <SidebarFooter />
+      <Footer />
     </Sidebar>
   )
 }
@@ -97,5 +98,15 @@ function Header() {
         />
       </div>
     </SidebarHeader>
+  )
+}
+
+function Footer() {
+  return (
+    <SidebarFooter>
+      <div>
+        <ThemeToggle />
+      </div>
+    </SidebarFooter>
   )
 }
