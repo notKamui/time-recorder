@@ -83,7 +83,11 @@ function Header() {
     <SidebarHeader className="flex flex-row justify-between">
       <motion.h1
         className={title({ h: 1, class: 'px-1' })}
-        animate={{ opacity: open ? 1 : 0, x: open ? 0 : -100 }}
+        animate={{
+          opacity: open ? 1 : 0,
+          x: open ? 0 : -100,
+          width: open ? 'auto' : 0,
+        }}
         transition={{
           duration: 0.2,
         }}
