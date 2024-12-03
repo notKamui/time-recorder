@@ -1,4 +1,5 @@
 import { DataTable } from '@app/components/data/data-table'
+import { TimeRecorderControls } from '@app/components/time/time-recorder-controls'
 import { Button } from '@app/components/ui/button'
 import { title } from '@app/components/ui/primitives/typography'
 import { cn } from '@app/utils/cn'
@@ -12,6 +13,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useServerFn } from '@tanstack/start'
 import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
@@ -43,12 +45,11 @@ type RecorderDisplayProps = {
 }
 
 export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
-  const { start, end, currentEntryId } =
-    useTimeTableControls(entries)
-
   const dayBefore = time.shift('days', -1)
   const dayAfter = time.shift('days', 1)
   const isToday = time.isToday()
+
+  const MotionTimeRecorderControls = motion.create(TimeRecorderControls)
 
   return (
     <div className="flex size-full flex-col gap-4">
@@ -76,46 +77,18 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         <div className="container flex-grow">
           <DataTable columns={timeTableColumns} data={entries} />
         </div>
-        <div className="container max-w-md rounded-md border">
-          {isToday &&
-            (currentEntryId ? (
-              <Button onClick={end}>End</Button>
-            ) : (
-              <Button onClick={start}>Start</Button>
-            ))}
-        </div>
+        <AnimatePresence>
+          {isToday && (
+            <MotionTimeRecorderControls
+              className="h-min max-w-md"
+              initial={{ opacity: 0, maxWidth: 0 }}
+              animate={{ opacity: 1, maxWidth: '28rem' }}
+              exit={{ opacity: 0, maxWidth: 0 }}
+              entries={entries}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
-}
-
-function useTimeTableControls(entries: TimeEntry[]) {
-  const router = useRouter()
-  const createTimeEntry = useServerFn($createTimeEntry)
-  const updateTimeEntry = useServerFn($updateTimeEntry)
-
-  const [currentEntryId, setCurrentEntryId] = useState<string | null>(() => {
-    const currentEntry = entries[0]
-    if (currentEntry?.endedAt) return null
-    return currentEntry?.id ?? null
-  })
-
-  async function start() {
-    const entryId = await createTimeEntry({ data: {} })
-    setCurrentEntryId(entryId)
-    router.invalidate()
-  }
-
-  async function end() {
-    if (!currentEntryId) return
-    await updateTimeEntry({ data: { id: currentEntryId, endedAt: new Date() } })
-    setCurrentEntryId(null)
-    router.invalidate()
-  }
-
-  return {
-    start,
-    end,
-    currentEntryId,
-  }
 }
