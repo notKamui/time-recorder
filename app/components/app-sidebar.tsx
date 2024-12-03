@@ -37,7 +37,7 @@ const sidebar: SidebarSection[] = [
   },
   {
     id: 'time',
-    name: 'Time',
+    name: 'Time recorder',
     items: [
       {
         title: 'Time',
@@ -71,7 +71,7 @@ export function AppSidebar({ user }: { user: PublicUser | null }) {
   return (
     <Sidebar>
       <SidebarHeader>
-        <h1 className={title({ h: 2 })}>Time Recorder</h1>
+        <h1 className={title({ h: 2 })}>Miniverso</h1>
       </SidebarHeader>
       <SidebarContent>
         {sidebar.map((section) =>

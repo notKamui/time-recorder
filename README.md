@@ -1,4 +1,4 @@
-# time-recorder
+# Miniverso
 
 To install dependencies:
 
