@@ -7,6 +7,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -18,24 +19,17 @@ import {
   type GlobalContext,
   useGlobalContext,
 } from '@app/hooks/use-global-context'
-import { Link } from '@tanstack/react-router'
+import { Link, useLinkProps } from '@tanstack/react-router'
 import { ChevronRightIcon, type LucideIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 export type NavGroupItem = {
   title: string
-  isActive?: boolean
-  icon?: LucideIcon
+  icon: LucideIcon
+  to: keyof FileRoutesByTo
+  items?: NavGroupSubItem[]
   condition?: (user: GlobalContext) => boolean
-} & (
-  | {
-      to: keyof FileRoutesByTo
-      items?: never
-    }
-  | {
-      to?: never
-      items: NavGroupSubItem[]
-    }
-)
+}
 
 export type NavGroupSubItem = {
   title: string
@@ -63,34 +57,7 @@ export function AppNavGroup({ title, items, condition }: AppNavGroupProps) {
         {items.map(
           (item) =>
             item.condition?.(context) !== false && (
-              <Collapsible
-                key={item.title + item.to}
-                asChild
-                defaultOpen={item.isActive}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <NavButton item={item} />
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items?.map(
-                        (subItem) =>
-                          subItem.condition?.(context) !== false && (
-                            <SidebarMenuSubItem
-                              key={subItem.title + subItem.to}
-                            >
-                              <SidebarMenuSubButton asChild>
-                                <Link to={subItem.to}>
-                                  <span>{subItem.title}</span>
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ),
-                      )}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
+              <MenuItem key={item.title + item.to} item={item} />
             ),
         )}
       </SidebarMenu>
@@ -98,25 +65,51 @@ export function AppNavGroup({ title, items, condition }: AppNavGroupProps) {
   )
 }
 
-function NavButton({ item }: { item: NavGroupItem }) {
-  if (item.to === undefined) {
-    return (
-      <SidebarMenuButton tooltip={item.title}>
-        {item.icon && <item.icon />}
-        <span>{item.title}</span>
-        <CollapsibleTrigger asChild>
-          <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-        </CollapsibleTrigger>
-      </SidebarMenuButton>
-    )
-  }
+function MenuItem({ item }: { item: NavGroupItem }) {
+  const defaultIsActive =
+    useLinkProps({ to: item.to })['data-status'] === 'active'
+  const [isActive, setIsActive] = useState(defaultIsActive)
+
+  useEffect(() => setIsActive(defaultIsActive), [defaultIsActive])
 
   return (
-    <Link to={item.to}>
-      <SidebarMenuButton tooltip={item.title}>
-        {item.icon && <item.icon />}
-        <span>{item.title}</span>
-      </SidebarMenuButton>
-    </Link>
+    <Collapsible
+      asChild
+      open={isActive}
+      onOpenChange={(open) => setIsActive(open)}
+      className="group/collapsible"
+    >
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild tooltip={item.title}>
+          <Link to={item.to}>
+            <item.icon />
+            <span>{item.title}</span>
+          </Link>
+        </SidebarMenuButton>
+        {item.items?.length && (
+          <>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuAction className="data-[state=open]:rotate-90">
+                <ChevronRightIcon />
+                <span className="sr-only">Toggle {item.title} section</span>
+              </SidebarMenuAction>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub>
+                {item.items?.map((subItem) => (
+                  <SidebarMenuSubItem key={subItem.title}>
+                    <SidebarMenuSubButton asChild>
+                      <Link to={subItem.to}>
+                        <span>{subItem.title}</span>
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </>
+        )}
+      </SidebarMenuItem>
+    </Collapsible>
   )
 }

@@ -29,9 +29,15 @@ const sections: AppNavGroupProps[] = [
         icon: HomeIcon,
       },
       {
-        title: 'Time',
+        title: 'Time recorder',
         to: '/time',
         icon: ClockIcon,
+        items: [
+          {
+            title: 'Calendar',
+            to: '/time/calendar',
+          },
+        ],
         condition: ({ user }) => !!user,
       },
     ],
@@ -71,11 +77,11 @@ export function AppSidebar() {
 
 function Header() {
   const { open } = useSidebar()
-  const MotionIcon = motion(StarIcon)
+  const MotionIcon = motion.create(StarIcon)
   return (
     <SidebarHeader className="flex flex-row justify-between">
       <motion.h1
-        className={title({ h: 1 })}
+        className={title({ h: 1, class: 'px-1' })}
         animate={{ opacity: open ? 1 : 0, x: open ? 0 : -100 }}
         transition={{
           duration: 0.2,
