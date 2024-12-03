@@ -9,7 +9,7 @@
     "lint:fix": "bunx biome check --write",
     "type-check": "bun tsc --noEmit",
     "check": "bun lint && bun type-check",
-    "dev:db": "bunx drizzle-kit",
+    "db": "bunx drizzle-kit",
     "dev:docker": "docker compose -f docker-compose.dev.yml up -d"
   },
   "devDependencies": {
