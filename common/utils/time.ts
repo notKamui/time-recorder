@@ -114,7 +114,7 @@ export namespace Time {
     function formatDay(): string {
       return isToday()
         ? 'Today'
-        : getDate().toLocaleDateString([], {
+        : getDate().toLocaleDateString(['en'], {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -123,7 +123,7 @@ export namespace Time {
     }
 
     function formatTime(): string {
-      return getDate().toLocaleTimeString([], {
+      return getDate().toLocaleTimeString(['en'], {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',

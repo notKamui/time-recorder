@@ -1,4 +1,4 @@
-import { AppSidebar } from '@app/components/app-sidebar'
+import { AppSidebar } from '@app/components/nav/app-sidebar'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -39,7 +39,7 @@ export function MainLayout({ children }: { children: ReactNode }) {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <main className="size-full p-4">{children}</main>
+        <main className="size-full space-y-8 p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )
