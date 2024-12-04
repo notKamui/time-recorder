@@ -39,7 +39,9 @@ export function MainLayout({ children }: { children: ReactNode }) {
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <main className="size-full space-y-8 p-4">{children}</main>
+        <main className="h-screen space-y-8 p-4 max-sm:w-screen ">
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )

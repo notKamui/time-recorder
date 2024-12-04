@@ -71,7 +71,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         </Button>
       </div>
       <div className="flex flex-col-reverse gap-4 lg:flex-row">
-        <div className="container flex-grow">
+        <div className="container w-full flex-grow">
           <DataTable columns={timeTableColumns} data={entries} />
         </div>
         {isToday && (
