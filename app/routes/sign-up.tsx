@@ -43,7 +43,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex min-h-full flex-col items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>
