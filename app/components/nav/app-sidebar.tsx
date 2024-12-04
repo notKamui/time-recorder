@@ -97,7 +97,7 @@ function Header() {
       <div>
         <MotionIcon
           className="absolute inset-0 top-4 left-4 h-8 w-4"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: open ? 0 : 1 }}
           animate={{ opacity: open ? 0 : 1 }}
         />
       </div>
