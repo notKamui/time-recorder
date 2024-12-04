@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@app/components/ui/table'
+import { cn } from '@app/utils/cn'
 import {
   type ColumnDef,
   flexRender,
@@ -17,12 +18,14 @@ export type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   emptyMessage?: string
+  className?: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   emptyMessage = 'No data',
+  className,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     columns,
@@ -34,7 +37,7 @@ export function DataTable<TData, TValue>({
   const rows = table.getRowModel().rows
 
   return (
-    <div className="rounded-md border">
+    <div className={cn('rounded-md border', className)}>
       <Table>
         <TableHeader>
           {headerGroups.map((group) => (

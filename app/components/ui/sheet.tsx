@@ -59,14 +59,18 @@ interface SheetContentProps
 const SheetContent = forwardRef<
   ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = 'right', className, children, ...props }, ref) => (
+>(({ side = 'right', className, children, title, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content
       ref={ref}
+      aria-describedby={undefined}
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
+      {title && (
+        <SheetPrimitive.Title className="sr-only">{title}</SheetPrimitive.Title>
+      )}
       <SheetPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>

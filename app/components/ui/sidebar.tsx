@@ -182,6 +182,7 @@ const Sidebar = forwardRef<
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
+            title="Sidebar"
             data-sidebar="sidebar"
             data-mobile="true"
             className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
@@ -302,7 +303,7 @@ SidebarRail.displayName = 'SidebarRail'
 const SidebarInset = forwardRef<HTMLDivElement, ComponentProps<'main'>>(
   ({ className, ...props }, ref) => {
     return (
-      <main
+      <div
         ref={ref}
         className={cn(
           'relative flex min-h-svh flex-1 flex-col bg-background',

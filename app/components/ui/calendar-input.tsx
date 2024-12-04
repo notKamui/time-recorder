@@ -28,7 +28,7 @@ export function CalendarInput({ value, onChange }: CalendarFormProps) {
               !value && 'text-muted-foreground',
             )}
           >
-            {value ? Time.from(value).formatDay() : <span>Pick a date</span>}
+            {value ? Time.from(value).formatDay({ short: true }) : <span>Pick a date</span>}
             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
