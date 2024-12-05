@@ -14,9 +14,14 @@ import { CalendarIcon } from 'lucide-react'
 export type CalendarFormProps = {
   value?: Date
   onChange: (date?: Date) => void
+  className?: string
 }
 
-export function CalendarInput({ value, onChange }: CalendarFormProps) {
+export function CalendarInput({
+  value,
+  onChange,
+  className,
+}: CalendarFormProps) {
   return (
     <>
       <Popover>
@@ -26,9 +31,14 @@ export function CalendarInput({ value, onChange }: CalendarFormProps) {
             className={cn(
               'w-[280px] pl-3 text-left font-normal max-sm:flex-grow',
               !value && 'text-muted-foreground',
+              className,
             )}
           >
-            {value ? Time.from(value).formatDay({ short: true }) : <span>Pick a date</span>}
+            {value ? (
+              Time.from(value).formatDay({ short: true })
+            ) : (
+              <span>Pick a date</span>
+            )}
             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>

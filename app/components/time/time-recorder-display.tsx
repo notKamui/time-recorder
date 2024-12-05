@@ -7,7 +7,7 @@ import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
 import { useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   startedAt: string
@@ -53,21 +53,27 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
 
   return (
     <div className="flex size-full flex-col gap-4">
-      <div className="flex flex-row gap-2">
-        <Button onClick={() => onDateChange(dayBefore)}>
-          <ChevronsLeftIcon />
+      <div className="flex flex-row items-center">
+        <Button
+          size="icon"
+          className="h-[36px] rounded-r-none"
+          onClick={() => onDateChange(dayBefore)}
+        >
+          <ChevronLeftIcon />
         </Button>
         <CalendarInput
           value={time.getDate()}
           onChange={(date) => onDateChange(Time.from(date))}
+          className="rounded-none"
         />
         <h3 className="sr-only">{time.formatDay()}</h3>
         <Button
+          size="icon"
           onClick={() => onDateChange(dayAfter)}
           disabled={isToday}
-          className={cn(isToday && 'hidden')}
+          className={cn('h-[36px] rounded-l-none', isToday && 'hidden')}
         >
-          <ChevronsRightIcon />
+          <ChevronRightIcon />
         </Button>
       </div>
       <div className="flex flex-col-reverse gap-4 lg:flex-row">
