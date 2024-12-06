@@ -2,12 +2,7 @@ import { cn } from '@app/utils/cn'
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { X } from 'lucide-react'
-import {
-  type ComponentPropsWithoutRef,
-  type ComponentRef,
-  type HTMLAttributes,
-  forwardRef,
-} from 'react'
+import type { ComponentProps, HTMLAttributes } from 'react'
 
 const Sheet = SheetPrimitive.Root
 
@@ -17,10 +12,11 @@ const SheetClose = SheetPrimitive.Close
 
 const SheetPortal = SheetPrimitive.Portal
 
-const SheetOverlay = forwardRef<
-  ComponentRef<typeof SheetPrimitive.Overlay>,
-  ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+const SheetOverlay = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<typeof SheetPrimitive.Overlay>) => (
   <SheetPrimitive.Overlay
     className={cn(
       'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=open]:animate-in',
@@ -29,7 +25,7 @@ const SheetOverlay = forwardRef<
     {...props}
     ref={ref}
   />
-))
+)
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
@@ -52,13 +48,17 @@ const sheetVariants = cva(
 )
 
 interface SheetContentProps
-  extends ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
+  extends ComponentProps<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {}
 
-const SheetContent = forwardRef<
-  ComponentRef<typeof SheetPrimitive.Content>,
-  SheetContentProps
->(({ side = 'right', className, children, title, ...props }, ref) => (
+const SheetContent = ({
+  ref,
+  side = 'right',
+  className,
+  children,
+  title,
+  ...props
+}: SheetContentProps) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content
@@ -77,7 +77,7 @@ const SheetContent = forwardRef<
       {children}
     </SheetPrimitive.Content>
   </SheetPortal>
-))
+)
 SheetContent.displayName = SheetPrimitive.Content.displayName
 
 const SheetHeader = ({
@@ -108,28 +108,30 @@ const SheetFooter = ({
 )
 SheetFooter.displayName = 'SheetFooter'
 
-const SheetTitle = forwardRef<
-  ComponentRef<typeof SheetPrimitive.Title>,
-  ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
->(({ className, ...props }, ref) => (
+const SheetTitle = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<typeof SheetPrimitive.Title>) => (
   <SheetPrimitive.Title
     ref={ref}
     className={cn('font-semibold text-foreground text-lg', className)}
     {...props}
   />
-))
+)
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
-const SheetDescription = forwardRef<
-  ComponentRef<typeof SheetPrimitive.Description>,
-  ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
->(({ className, ...props }, ref) => (
+const SheetDescription = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<typeof SheetPrimitive.Description>) => (
   <SheetPrimitive.Description
     ref={ref}
     className={cn('text-muted-foreground text-sm', className)}
     {...props}
   />
-))
+)
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export {

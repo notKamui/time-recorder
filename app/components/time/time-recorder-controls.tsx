@@ -4,6 +4,7 @@ import { Textarea } from '@app/components/ui/textarea'
 import { useNow } from '@app/hooks/use-now'
 import { cn } from '@app/utils/cn'
 import { Time } from '@common/utils/time'
+import type { WithRef } from '@common/utils/types'
 import type { TimeEntry } from '@server/db/schema'
 import {
   $createTimeEntry,
@@ -11,7 +12,7 @@ import {
 } from '@server/functions/time-entry'
 import { useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/start'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 
 export type TimeRecorderControlsProps = {
   entries: TimeEntry[]
@@ -56,10 +57,11 @@ function useTimeTableControls(entries: TimeRecorderControlsProps['entries']) {
   }
 }
 
-export const TimeRecorderControls = forwardRef<
-  HTMLDivElement,
-  TimeRecorderControlsProps
->(({ entries, className }, elementRef) => {
+export const TimeRecorderControls = ({
+  ref: elementRef,
+  entries,
+  className,
+}: WithRef<TimeRecorderControlsProps, HTMLDivElement>) => {
   const { start, end, currentEntry } = useTimeTableControls(entries)
   const now = useNow()
   const currentStart = currentEntry ? Time.from(currentEntry.startedAt) : null
@@ -104,4 +106,4 @@ export const TimeRecorderControls = forwardRef<
       )}
     </div>
   )
-})
+}

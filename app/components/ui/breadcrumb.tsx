@@ -1,25 +1,17 @@
 import { cn } from '@app/utils/cn'
 import { Slot } from '@radix-ui/react-slot'
 import { ChevronRight, MoreHorizontal } from 'lucide-react'
-import {
-  type ComponentProps,
-  type ComponentPropsWithoutRef,
-  type ReactNode,
-  forwardRef,
-} from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
-const Breadcrumb = forwardRef<
-  HTMLElement,
-  ComponentPropsWithoutRef<'nav'> & {
-    separator?: ReactNode
-  }
->(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />)
+const Breadcrumb = ({
+  ref,
+  ...props
+}: ComponentProps<'nav'> & {
+  separator?: ReactNode
+}) => <nav ref={ref} aria-label="breadcrumb" {...props} />
 Breadcrumb.displayName = 'Breadcrumb'
 
-const BreadcrumbList = forwardRef<
-  HTMLOListElement,
-  ComponentPropsWithoutRef<'ol'>
->(({ className, ...props }, ref) => (
+const BreadcrumbList = ({ ref, className, ...props }: ComponentProps<'ol'>) => (
   <ol
     ref={ref}
     className={cn(
@@ -28,27 +20,26 @@ const BreadcrumbList = forwardRef<
     )}
     {...props}
   />
-))
+)
 BreadcrumbList.displayName = 'BreadcrumbList'
 
-const BreadcrumbItem = forwardRef<
-  HTMLLIElement,
-  ComponentPropsWithoutRef<'li'>
->(({ className, ...props }, ref) => (
+const BreadcrumbItem = ({ ref, className, ...props }: ComponentProps<'li'>) => (
   <li
     ref={ref}
     className={cn('inline-flex items-center gap-1.5', className)}
     {...props}
   />
-))
+)
 BreadcrumbItem.displayName = 'BreadcrumbItem'
 
-const BreadcrumbLink = forwardRef<
-  HTMLAnchorElement,
-  ComponentPropsWithoutRef<'a'> & {
-    asChild?: boolean
-  }
->(({ asChild, className, ...props }, ref) => {
+const BreadcrumbLink = ({
+  ref,
+  asChild,
+  className,
+  ...props
+}: ComponentProps<'a'> & {
+  asChild?: boolean
+}) => {
   const Comp = asChild ? Slot : 'a'
 
   return (
@@ -58,13 +49,14 @@ const BreadcrumbLink = forwardRef<
       {...props}
     />
   )
-})
+}
 BreadcrumbLink.displayName = 'BreadcrumbLink'
 
-const BreadcrumbPage = forwardRef<
-  HTMLSpanElement,
-  ComponentPropsWithoutRef<'span'>
->(({ className, ...props }, ref) => (
+const BreadcrumbPage = ({
+  ref,
+  className,
+  ...props
+}: ComponentProps<'span'>) => (
   <span
     tabIndex={-1}
     ref={ref}
@@ -74,7 +66,7 @@ const BreadcrumbPage = forwardRef<
     className={cn('font-normal text-foreground', className)}
     {...props}
   />
-))
+)
 BreadcrumbPage.displayName = 'BreadcrumbPage'
 
 const BreadcrumbSeparator = ({
