@@ -13,6 +13,5 @@ const Textarea = ({ ref, className, ...props }: ComponentProps<'textarea'>) => {
     />
   )
 }
-Textarea.displayName = 'Textarea'
 
 export { Textarea }

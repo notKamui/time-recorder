@@ -15,7 +15,6 @@ const Table = ({
     />
   </div>
 )
-Table.displayName = 'Table'
 
 const TableHeader = ({
   ref,
@@ -24,7 +23,6 @@ const TableHeader = ({
 }: WithRef<HTMLAttributes<HTMLTableSectionElement>>) => (
   <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
 )
-TableHeader.displayName = 'TableHeader'
 
 const TableBody = ({
   ref,
@@ -37,7 +35,6 @@ const TableBody = ({
     {...props}
   />
 )
-TableBody.displayName = 'TableBody'
 
 const TableFooter = ({
   ref,
@@ -53,7 +50,6 @@ const TableFooter = ({
     {...props}
   />
 )
-TableFooter.displayName = 'TableFooter'
 
 const TableRow = ({
   ref,
@@ -69,7 +65,6 @@ const TableRow = ({
     {...props}
   />
 )
-TableRow.displayName = 'TableRow'
 
 const TableHead = ({
   ref,
@@ -85,7 +80,6 @@ const TableHead = ({
     {...props}
   />
 )
-TableHead.displayName = 'TableHead'
 
 const TableCell = ({
   ref,
@@ -101,7 +95,6 @@ const TableCell = ({
     {...props}
   />
 )
-TableCell.displayName = 'TableCell'
 
 const TableCaption = ({
   ref,
@@ -114,7 +107,6 @@ const TableCaption = ({
     {...props}
   />
 )
-TableCaption.displayName = 'TableCaption'
 
 export {
   Table,

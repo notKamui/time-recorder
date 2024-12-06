@@ -14,6 +14,5 @@ const Input = ({ ref, className, type, ...props }: ComponentProps<'input'>) => {
     />
   )
 }
-Input.displayName = 'Input'
 
 export { Input }

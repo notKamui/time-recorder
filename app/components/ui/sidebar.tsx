@@ -105,7 +105,7 @@ const SidebarProvider = ({
   }
 
   return (
-    (<SidebarContext value={contextValue}>
+    <SidebarContext value={contextValue}>
       <TooltipProvider delayDuration={0}>
         <div
           style={
@@ -125,10 +125,9 @@ const SidebarProvider = ({
           {children}
         </div>
       </TooltipProvider>
-    </SidebarContext>)
-  );
+    </SidebarContext>
+  )
 }
-SidebarProvider.displayName = 'SidebarProvider'
 
 type SidebarProps = ComponentProps<'div'> & {
   side?: 'left' | 'right'
@@ -227,7 +226,6 @@ const Sidebar = ({
     </div>
   )
 }
-Sidebar.displayName = 'Sidebar'
 
 const SidebarTrigger = ({
   ref,
@@ -255,7 +253,6 @@ const SidebarTrigger = ({
     </Button>
   )
 }
-SidebarTrigger.displayName = 'SidebarTrigger'
 
 const SidebarRail = ({
   ref,
@@ -285,7 +282,6 @@ const SidebarRail = ({
     />
   )
 }
-SidebarRail.displayName = 'SidebarRail'
 
 const SidebarInset = ({ ref, className, ...props }: ComponentProps<'div'>) => {
   return (
@@ -300,7 +296,6 @@ const SidebarInset = ({ ref, className, ...props }: ComponentProps<'div'>) => {
     />
   )
 }
-SidebarInset.displayName = 'SidebarInset'
 
 const SidebarInput = ({
   ref,
@@ -319,7 +314,6 @@ const SidebarInput = ({
     />
   )
 }
-SidebarInput.displayName = 'SidebarInput'
 
 const SidebarHeader = ({ ref, className, ...props }: ComponentProps<'div'>) => {
   return (
@@ -331,7 +325,6 @@ const SidebarHeader = ({ ref, className, ...props }: ComponentProps<'div'>) => {
     />
   )
 }
-SidebarHeader.displayName = 'SidebarHeader'
 
 const SidebarFooter = ({ ref, className, ...props }: ComponentProps<'div'>) => {
   return (
@@ -343,7 +336,6 @@ const SidebarFooter = ({ ref, className, ...props }: ComponentProps<'div'>) => {
     />
   )
 }
-SidebarFooter.displayName = 'SidebarFooter'
 
 const SidebarSeparator = ({
   ref,
@@ -359,7 +351,6 @@ const SidebarSeparator = ({
     />
   )
 }
-SidebarSeparator.displayName = 'SidebarSeparator'
 
 const SidebarContent = ({
   ref,
@@ -378,7 +369,6 @@ const SidebarContent = ({
     />
   )
 }
-SidebarContent.displayName = 'SidebarContent'
 
 const SidebarGroup = ({ ref, className, ...props }: ComponentProps<'div'>) => {
   return (
@@ -390,7 +380,6 @@ const SidebarGroup = ({ ref, className, ...props }: ComponentProps<'div'>) => {
     />
   )
 }
-SidebarGroup.displayName = 'SidebarGroup'
 
 const SidebarGroupLabel = ({
   ref,
@@ -413,7 +402,6 @@ const SidebarGroupLabel = ({
     />
   )
 }
-SidebarGroupLabel.displayName = 'SidebarGroupLabel'
 
 const SidebarGroupAction = ({
   ref,
@@ -438,7 +426,6 @@ const SidebarGroupAction = ({
     />
   )
 }
-SidebarGroupAction.displayName = 'SidebarGroupAction'
 
 const SidebarGroupContent = ({
   ref,
@@ -452,7 +439,6 @@ const SidebarGroupContent = ({
     {...props}
   />
 )
-SidebarGroupContent.displayName = 'SidebarGroupContent'
 
 const SidebarMenu = ({ ref, className, ...props }: ComponentProps<'ul'>) => (
   <ul
@@ -462,7 +448,6 @@ const SidebarMenu = ({ ref, className, ...props }: ComponentProps<'ul'>) => (
     {...props}
   />
 )
-SidebarMenu.displayName = 'SidebarMenu'
 
 const SidebarMenuItem = ({
   ref,
@@ -476,7 +461,6 @@ const SidebarMenuItem = ({
     {...props}
   />
 )
-SidebarMenuItem.displayName = 'SidebarMenuItem'
 
 const sidebarMenuButtonVariants = cva(
   'peer/menu-button group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
@@ -550,7 +534,6 @@ const SidebarMenuButton = ({
     </Tooltip>
   )
 }
-SidebarMenuButton.displayName = 'SidebarMenuButton'
 
 const SidebarMenuAction = ({
   ref,
@@ -584,7 +567,6 @@ const SidebarMenuAction = ({
     />
   )
 }
-SidebarMenuAction.displayName = 'SidebarMenuAction'
 
 const SidebarMenuBadge = ({
   ref,
@@ -606,7 +588,6 @@ const SidebarMenuBadge = ({
     {...props}
   />
 )
-SidebarMenuBadge.displayName = 'SidebarMenuBadge'
 
 const SidebarMenuSkeleton = ({
   ref,
@@ -642,7 +623,6 @@ const SidebarMenuSkeleton = ({
     </div>
   )
 }
-SidebarMenuSkeleton.displayName = 'SidebarMenuSkeleton'
 
 const SidebarMenuSub = ({ ref, className, ...props }: ComponentProps<'ul'>) => (
   <ul
@@ -656,12 +636,10 @@ const SidebarMenuSub = ({ ref, className, ...props }: ComponentProps<'ul'>) => (
     {...props}
   />
 )
-SidebarMenuSub.displayName = 'SidebarMenuSub'
 
 const SidebarMenuSubItem = ({ ref, ...props }: ComponentProps<'li'>) => (
   <li ref={ref} {...props} />
 )
-SidebarMenuSubItem.displayName = 'SidebarMenuSubItem'
 
 const SidebarMenuSubButton = ({
   ref,
@@ -695,7 +673,6 @@ const SidebarMenuSubButton = ({
     />
   )
 }
-SidebarMenuSubButton.displayName = 'SidebarMenuSubButton'
 
 export {
   Sidebar,

@@ -26,6 +26,5 @@ const TooltipContent = ({
     />
   </TooltipPrimitive.Portal>
 )
-TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }

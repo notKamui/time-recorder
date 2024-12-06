@@ -16,7 +16,6 @@ const Card = ({
     {...props}
   />
 )
-Card.displayName = 'Card'
 
 const CardHeader = ({
   ref,
@@ -29,7 +28,6 @@ const CardHeader = ({
     {...props}
   />
 )
-CardHeader.displayName = 'CardHeader'
 
 const CardTitle = ({
   ref,
@@ -42,7 +40,6 @@ const CardTitle = ({
     {...props}
   />
 )
-CardTitle.displayName = 'CardTitle'
 
 const CardDescription = ({
   ref,
@@ -55,7 +52,6 @@ const CardDescription = ({
     {...props}
   />
 )
-CardDescription.displayName = 'CardDescription'
 
 const CardContent = ({
   ref,
@@ -64,7 +60,6 @@ const CardContent = ({
 }: WithRef<HTMLAttributes<HTMLDivElement>>) => (
   <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
 )
-CardContent.displayName = 'CardContent'
 
 const CardFooter = ({
   ref,
@@ -77,6 +72,5 @@ const CardFooter = ({
     {...props}
   />
 )
-CardFooter.displayName = 'CardFooter'
 
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

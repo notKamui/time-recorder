@@ -18,6 +18,5 @@ const Label = ({ ref, className, ...props }: LabelProps) => (
     {...props}
   />
 )
-Label.displayName = LabelPrimitive.Root.displayName
 
 export { Label }
