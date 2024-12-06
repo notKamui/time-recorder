@@ -1,11 +1,11 @@
 import { $setTheme } from '@server/functions/theme'
 import { useServerFn } from '@tanstack/start'
-import { createContext, useContext } from 'react'
+import { createContext, use } from 'react'
 
 export const ThemeContext = createContext({ theme: 'dark' })
 
 export function useTheme() {
-  const context = useContext(ThemeContext)
+  const context = use(ThemeContext)
   const setTheme = useServerFn($setTheme)
 
   if (!context) {
