@@ -300,7 +300,7 @@ const SidebarRail = forwardRef<HTMLButtonElement, ComponentProps<'button'>>(
 )
 SidebarRail.displayName = 'SidebarRail'
 
-const SidebarInset = forwardRef<HTMLDivElement, ComponentProps<'main'>>(
+const SidebarInset = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
