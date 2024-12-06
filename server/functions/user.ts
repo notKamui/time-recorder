@@ -2,6 +2,7 @@ import { SignInSchema, SignUpSchema } from '@common/forms/user'
 import type { UUID } from '@common/utils/uuid'
 import { db, takeUniqueOrNull } from '@server/db'
 import { usersTable } from '@server/db/schema'
+import { $emitClientErrorMiddleware } from '@server/middlewares/emit-client-error'
 import { $rateLimitMiddleware } from '@server/middlewares/rate-limit'
 import { $sessionMiddleware } from '@server/middlewares/session'
 import { hashPassword, verifyPassword } from '@server/utils/password'
@@ -17,7 +18,7 @@ import { createServerFn } from '@tanstack/start'
 import { eq } from 'drizzle-orm'
 
 export const $signUp = createServerFn({ method: 'POST' })
-  .middleware([$rateLimitMiddleware])
+  .middleware([$emitClientErrorMiddleware, $rateLimitMiddleware])
   .validator(validate(SignUpSchema, { async: true }))
   .handler(async ({ data }) => {
     const { username, password } = await data
@@ -34,7 +35,7 @@ export const $signUp = createServerFn({ method: 'POST' })
   })
 
 export const $signIn = createServerFn({ method: 'POST' })
-  .middleware([$rateLimitMiddleware])
+  .middleware([$emitClientErrorMiddleware, $rateLimitMiddleware])
   .validator(validate(SignInSchema))
   .handler(async ({ data: { username, password } }) => {
     const user = await db
@@ -53,7 +54,7 @@ export const $signIn = createServerFn({ method: 'POST' })
   })
 
 export const $signOut = createServerFn({ method: 'POST' })
-  .middleware([$sessionMiddleware])
+  .middleware([$emitClientErrorMiddleware, $sessionMiddleware])
   .handler(async () => {
     setSessionTokenCookie('', new Date(0))
     throw redirect({
@@ -63,7 +64,7 @@ export const $signOut = createServerFn({ method: 'POST' })
   })
 
 export const $authenticate = createServerFn({ method: 'GET' })
-  .middleware([$sessionMiddleware])
+  .middleware([$emitClientErrorMiddleware, $sessionMiddleware])
   .handler(({ context: { session, user } }) => {
     return {
       session,

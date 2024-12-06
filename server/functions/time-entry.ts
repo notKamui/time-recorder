@@ -1,5 +1,6 @@
 import { db, takeUniqueOrNull } from '@server/db'
 import { timeEntriesTable } from '@server/db/schema'
+import { $emitClientErrorMiddleware } from '@server/middlewares/emit-client-error'
 import { $rateLimitMiddleware } from '@server/middlewares/rate-limit'
 import { $sessionMiddleware } from '@server/middlewares/session'
 import { validate } from '@server/utils/validate'
@@ -9,7 +10,7 @@ import { and, eq, gte, isNull, lte, or } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
-  .middleware([$sessionMiddleware])
+  .middleware([$emitClientErrorMiddleware, $sessionMiddleware])
   .validator(validate(z.object({ date: z.date() })))
   .handler(async ({ context: { user }, data: { date } }) => {
     const dayBegin = new Date(date)
@@ -35,7 +36,11 @@ export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
   })
 
 export const $createTimeEntry = createServerFn({ method: 'POST' })
-  .middleware([$sessionMiddleware, $rateLimitMiddleware])
+  .middleware([
+    $emitClientErrorMiddleware,
+    $rateLimitMiddleware,
+    $sessionMiddleware,
+  ])
   .validator(validate(z.object({ startedAt: z.date().optional() })))
   .handler(async ({ context: { user }, data: { startedAt } }) => {
     const timeEntry = await db
@@ -53,7 +58,11 @@ export const $createTimeEntry = createServerFn({ method: 'POST' })
   })
 
 export const $updateTimeEntry = createServerFn({ method: 'POST' })
-  .middleware([$sessionMiddleware, $rateLimitMiddleware])
+  .middleware([
+    $emitClientErrorMiddleware,
+    $rateLimitMiddleware,
+    $sessionMiddleware,
+  ])
   .validator(
     validate(
       z.object({
@@ -88,7 +97,11 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
   )
 
 export const $deleteTimeEntry = createServerFn({ method: 'POST' })
-  .middleware([$sessionMiddleware, $rateLimitMiddleware])
+  .middleware([
+    $emitClientErrorMiddleware,
+    $rateLimitMiddleware,
+    $sessionMiddleware,
+  ])
   .validator(validate(z.object({ id: z.string() })))
   .handler(async ({ context: { user }, data: { id } }) => {
     const timeEntry = await db
