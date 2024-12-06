@@ -64,7 +64,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         <CalendarInput
           value={time.getDate()}
           onChange={(date) => onDateChange(Time.from(date))}
-          className="rounded-none"
+          className={cn(isToday ? 'rounded-l-none' : 'rounded-none')}
         />
         <h3 className="sr-only">{time.formatDay()}</h3>
         <Button
