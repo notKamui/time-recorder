@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@app/components/theme/provider'
 import { Toaster } from '@app/components/ui/sonner'
 import { crumbs } from '@app/hooks/use-crumbs'
-import { useEvent } from '@app/hooks/use-event'
+import { useServerErrors } from '@app/hooks/use-server-errors'
 import { MainLayout } from '@app/layouts/main'
 import appCss from '@app/styles/index.css?url'
 import { cn } from '@app/utils/cn'
@@ -15,7 +15,6 @@ import {
 } from '@tanstack/react-router'
 import { Meta, Scripts } from '@tanstack/start'
 import { outdent } from 'outdent'
-import { toast } from 'sonner'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -60,9 +59,7 @@ export const Route = createRootRoute({
   component: () => {
     const uiTheme = Route.useLoaderData({ select: (state) => state.uiTheme })
 
-    useEvent('server-error', (event) => {
-      toast.error(event.detail.body.error, { richColors: true })
-    })
+    useServerErrors()
 
     return (
       <html lang="en" className={cn(uiTheme)}>
@@ -73,7 +70,12 @@ export const Route = createRootRoute({
           <ThemeProvider theme={uiTheme}>
             <MainLayout>
               <Outlet />
-              <Toaster />
+              <Toaster
+                closeButton
+                duration={5000}
+                richColors
+                visibleToasts={5}
+              />
             </MainLayout>
           </ThemeProvider>
           <ScrollRestoration />

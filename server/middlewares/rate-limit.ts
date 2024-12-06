@@ -34,11 +34,9 @@ function createTokenBucketManager<Key>(max: number, refillRateSeconds: number) {
 
 const bucket = createTokenBucketManager<string>(10, 2)
 
-export const $rateLimitMiddleware = createMiddleware().server(
-  async ({ next }) => {
-    const ip = getRequestIP()
-    if (!ip) badRequest('Suspicious request without IP address', 400)
-    if (!bucket.consume(ip, 1)) badRequest('Too many requests', 429)
-    return await next()
-  },
-)
+export const $$rateLimit = createMiddleware().server(async ({ next }) => {
+  const ip = getRequestIP()
+  if (!ip) badRequest('Suspicious request without IP address', 400)
+  if (!bucket.consume(ip, 1)) badRequest('Too many requests', 429)
+  return await next()
+})

@@ -3,7 +3,7 @@ import { badRequest } from '@server/utils/response'
 import { createMiddleware } from '@tanstack/start'
 import { getRequestURL } from 'vinxi/http'
 
-export const $csrfMiddleware = createMiddleware().server(async ({ next }) => {
+export const $$csrf = createMiddleware().server(async ({ next }) => {
   if (env.DISABLE_CSRF) return await next()
 
   const origin = getRequestURL().origin

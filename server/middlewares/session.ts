@@ -1,4 +1,4 @@
-import { $csrfMiddleware } from '@server/middlewares/csrf'
+import { $$csrf } from '@server/middlewares/csrf'
 import {
   deleteSessionTokenCookie,
   getSessionTokenCookie,
@@ -8,8 +8,8 @@ import {
 import { redirect } from '@tanstack/react-router'
 import { createMiddleware, json } from '@tanstack/start'
 
-export const $sessionMiddleware = createMiddleware()
-  .middleware([$csrfMiddleware])
+export const $$session = createMiddleware()
+  .middleware([$$csrf])
   .server(async ({ next }) => {
     const token = getSessionTokenCookie()
     if (!token) {

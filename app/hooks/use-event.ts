@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 
 export function useEvent<K extends keyof WindowEventMap>(
   type: K,
@@ -12,7 +12,7 @@ export function useEvent(
 ): void
 export function useEvent(...args: Parameters<typeof window.addEventListener>) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: All of the args are dependencies
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window === 'undefined') return
 
     window.addEventListener(...args)

@@ -1,4 +1,4 @@
-import { $csrfMiddleware } from '@server/middlewares/csrf'
+import { $$csrf } from '@server/middlewares/csrf'
 import { validate } from '@server/utils/validate'
 import { createServerFn } from '@tanstack/start'
 import { z } from 'vinxi'
@@ -19,7 +19,7 @@ export const $setTheme = createServerFn({ method: 'POST' })
   })
 
 export const $getTheme = createServerFn({ method: 'GET' })
-  .middleware([$csrfMiddleware])
+  .middleware([$$csrf])
   .handler(async () => {
     let uiTheme = getCookie('ui-theme') as 'light' | 'dark' | undefined
     if (!uiTheme) {

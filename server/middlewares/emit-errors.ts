@@ -1,12 +1,10 @@
 import { createMiddleware } from '@tanstack/start'
 
-export const $emitClientErrorMiddleware = createMiddleware()
+export const $$emitErrors = createMiddleware()
   .client(async ({ next }) => {
     try {
       return await next()
     } catch (error) {
-      console.log('Client error:', error)
-
       if (typeof error?.message === 'string') {
         const actualError = JSON.parse(error.message)
         window.dispatchEvent(
