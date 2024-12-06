@@ -18,7 +18,7 @@ import { PanelLeft } from 'lucide-react'
 import {
   type CSSProperties,
   type ComponentProps,
-  type ElementRef,
+  type ComponentRef,
   forwardRef,
   useCallback,
   useEffect,
@@ -243,7 +243,7 @@ const Sidebar = forwardRef<
 Sidebar.displayName = 'Sidebar'
 
 const SidebarTrigger = forwardRef<
-  ElementRef<typeof Button>,
+  ComponentRef<typeof Button>,
   ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
@@ -314,7 +314,7 @@ const SidebarInset = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
 SidebarInset.displayName = 'SidebarInset'
 
 const SidebarInput = forwardRef<
-  ElementRef<typeof Input>,
+  ComponentRef<typeof Input>,
   ComponentProps<typeof Input>
 >(({ className, ...props }, ref) => {
   return (
@@ -360,7 +360,7 @@ const SidebarFooter = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
 SidebarFooter.displayName = 'SidebarFooter'
 
 const SidebarSeparator = forwardRef<
-  ElementRef<typeof Separator>,
+  ComponentRef<typeof Separator>,
   ComponentProps<typeof Separator>
 >(({ className, ...props }, ref) => {
   return (
