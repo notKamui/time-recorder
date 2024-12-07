@@ -5,7 +5,7 @@ import { CalendarInput } from '@app/components/ui/calendar-input'
 import { cn } from '@app/utils/cn'
 import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
@@ -54,18 +54,10 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   return (
     <div className="flex size-full flex-col gap-4">
       <div className="flex flex-row items-center">
-        <Button
-          size="icon"
-          className="h-[36px] rounded-r-none"
-          onClick={() => onDateChange(dayBefore)}
-          onMouseEnter={() =>
-            router.preloadRoute({
-              to: '/time/$day',
-              params: { day: dayBefore.toISOString() },
-            })
-          }
-        >
-          <ChevronLeftIcon />
+        <Button size="icon" className="h-[36px] rounded-r-none" asChild>
+          <Link to="/time/$day" params={{ day: dayBefore.toISOString() }}>
+            <ChevronLeftIcon />
+          </Link>
         </Button>
         <CalendarInput
           value={time.getDate()}
@@ -73,20 +65,18 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           className={cn(isToday ? 'rounded-l-none' : 'rounded-none')}
         />
         <h3 className="sr-only">{time.formatDay()}</h3>
-        <Button
-          size="icon"
-          className={cn('h-[36px] rounded-l-none', isToday && 'hidden')}
-          onClick={() => onDateChange(dayAfter)}
-          onMouseEnter={() =>
-            router.preloadRoute({
-              to: '/time/$day',
-              params: { day: dayAfter.toISOString() },
-            })
-          }
-          disabled={isToday}
-        >
-          <ChevronRightIcon />
-        </Button>
+        {!isToday && (
+          <Button
+            size="icon"
+            className={cn('h-[36px] rounded-l-none')}
+            disabled={isToday}
+            asChild
+          >
+            <Link to="/time/$day" params={{ day: dayAfter.toISOString() }}>
+              <ChevronRightIcon />
+            </Link>
+          </Button>
+        )}
       </div>
       <div className="flex flex-col-reverse gap-4 lg:flex-row">
         <DataTable
