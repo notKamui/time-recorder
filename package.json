@@ -53,7 +53,7 @@
     "outdent": "^0.8.0",
     "postgres": "^3.4.5",
     "react": "^19.0.0",
-    "react-day-picker": "^8.10.1",
+    "react-day-picker": "^9.4.1",
     "react-dom": "^19.0.0",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.5",
@@ -64,5 +64,9 @@
   "peerDependencies": {
     "typescript": "^5.7.2"
   },
-  "trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"]
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@parcel/watcher",
+    "esbuild"
+  ]
 }
