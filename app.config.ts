@@ -7,6 +7,7 @@ export default defineConfig({
   },
   tsr: {
     generatedRouteTree: './app/gen/route-tree.gen.ts',
+    autoCodeSplitting: true,
   },
   vite: {
     plugins: [tsconfigPaths()],

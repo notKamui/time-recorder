@@ -58,6 +58,12 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           size="icon"
           className="h-[36px] rounded-r-none"
           onClick={() => onDateChange(dayBefore)}
+          onMouseEnter={() =>
+            router.preloadRoute({
+              to: '/time/$day',
+              params: { day: dayBefore.toISOString() },
+            })
+          }
         >
           <ChevronLeftIcon />
         </Button>
@@ -69,9 +75,15 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         <h3 className="sr-only">{time.formatDay()}</h3>
         <Button
           size="icon"
-          onClick={() => onDateChange(dayAfter)}
-          disabled={isToday}
           className={cn('h-[36px] rounded-l-none', isToday && 'hidden')}
+          onClick={() => onDateChange(dayAfter)}
+          onMouseEnter={() =>
+            router.preloadRoute({
+              to: '/time/$day',
+              params: { day: dayAfter.toISOString() },
+            })
+          }
+          disabled={isToday}
         >
           <ChevronRightIcon />
         </Button>

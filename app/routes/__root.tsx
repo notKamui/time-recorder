@@ -1,3 +1,4 @@
+import { RouterDevtools } from '@app/components/router-devtools'
 import { ThemeProvider } from '@app/components/theme/provider'
 import { Toaster } from '@app/components/ui/sonner'
 import { crumbs } from '@app/hooks/use-crumbs'
@@ -15,6 +16,7 @@ import {
 } from '@tanstack/react-router'
 import { Meta, Scripts } from '@tanstack/start'
 import { outdent } from 'outdent'
+import { Suspense } from 'react'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -78,6 +80,9 @@ export const Route = createRootRoute({
               />
             </MainLayout>
           </ThemeProvider>
+          <Suspense>
+            <RouterDevtools position="bottom-right" />
+          </Suspense>
           <ScrollRestoration />
           <Scripts />
         </body>
