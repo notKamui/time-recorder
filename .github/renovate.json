@@ -10,7 +10,8 @@
     ":disablePeerDependencies",
     ":maintainLockFilesMonthly",
     ":semanticCommits",
-    ":semanticCommitTypeAll(chore)"
+    ":semanticCommitTypeAll(chore)",
+    ":dependencyDashboard"
   ],
   "ignorePresets": [":ignoreModulesAndTests"],
   "rangeStrategy": "bump"
