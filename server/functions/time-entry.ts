@@ -1,3 +1,4 @@
+
 import { db, takeUniqueOrNull } from '@server/db'
 import { timeEntriesTable } from '@server/db/schema'
 import '@server/middlewares/global'

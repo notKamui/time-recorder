@@ -11,11 +11,13 @@ export interface Time {
   shift(type: ShiftType, count: number): Time
   compare(other: Time, type?: ShiftType): number
   toISOString(): string
-  formatDay(options?: { short: boolean }): string
-  formatTime(): string
+  formatDay(options?: { short?: boolean }): string
+  formatTime(options?: { short?: boolean }): string
   formatDiff(other: Time): string
   isToday(): boolean
   getDate(): Date
+  setDay(time: Date | Time): Time
+  setTime(time: string): Time
 }
 
 export namespace Time {
@@ -132,11 +134,11 @@ export namespace Time {
             })
     }
 
-    function formatTime(): string {
-      return getDate().toLocaleTimeString(['en'], {
+    function formatTime(options?: { short?: boolean }): string {
+      return getDate().toLocaleTimeString(['fr'], {
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
+        second: options?.short ? undefined : '2-digit',
       })
     }
 
@@ -152,6 +154,23 @@ export namespace Time {
       )}:${String(seconds).padStart(2, '0')}`
     }
 
+    function setDay(time: Date | Time): Time {
+      const date = getDate()
+      const target = time instanceof Date ? time : time.getDate()
+      date.setFullYear(target.getFullYear())
+      date.setMonth(target.getMonth())
+      date.setDate(target.getDate())
+      return from(date)
+    }
+
+    function setTime(time: string): Time {
+      const date = getDate()
+      const [hours, minutes] = time.split(':').map(Number)
+      date.setHours(hours)
+      date.setMinutes(minutes)
+      return from(date)
+    }
+
     return {
       shift,
       compare,
@@ -161,6 +180,8 @@ export namespace Time {
       formatDiff,
       isToday,
       getDate,
+      setDay,
+      setTime,
     }
   }
 }
