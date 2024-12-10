@@ -135,10 +135,11 @@ export namespace Time {
     }
 
     function formatTime(options?: { short?: boolean }): string {
-      return getDate().toLocaleTimeString(['fr'], {
+      return getDate().toLocaleTimeString(['en'], {
         hour: '2-digit',
         minute: '2-digit',
         second: options?.short ? undefined : '2-digit',
+        hour12: false,
       })
     }
 
