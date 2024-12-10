@@ -14,10 +14,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@tanstack/router-devtools": "^1.87.0",
+    "@tanstack/router-devtools": "^1.87.3",
     "@types/bun": "latest",
     "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.30.0",
@@ -40,9 +40,9 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@tanstack/react-form": "^0.39.0",
-    "@tanstack/react-router": "^1.87.0",
+    "@tanstack/react-router": "^1.87.3",
     "@tanstack/react-table": "^8.20.5",
-    "@tanstack/start": "^1.87.0",
+    "@tanstack/start": "^1.87.4",
     "@tanstack/zod-form-adapter": "^0.39.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -54,16 +54,20 @@
     "outdent": "^0.8.0",
     "postgres": "^3.4.5",
     "react": "^19.0.0",
-    "react-day-picker": "^9.4.1",
+    "react-day-picker": "^9.4.2",
     "react-dom": "^19.0.0",
-    "sonner": "^1.7.0",
+    "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vinxi": "^0.5.1",
-    "zod": "^3.23.8"
+    "zod": "^3.24.0"
   },
   "peerDependencies": {
     "typescript": "^5.7.2"
   },
-  "trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"]
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@parcel/watcher",
+    "esbuild"
+  ]
 }
