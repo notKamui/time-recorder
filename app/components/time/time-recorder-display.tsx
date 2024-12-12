@@ -22,7 +22,7 @@ import { Link, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useServerFn } from '@tanstack/start'
 import { zodValidator } from '@tanstack/zod-form-adapter'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { ChevronLeftIcon, ChevronRightIcon, } from 'lucide-react'
 import { useState } from 'react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {

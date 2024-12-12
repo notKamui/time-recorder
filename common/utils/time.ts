@@ -97,9 +97,8 @@ export namespace Time {
           otherDate.setMilliseconds(0)
         }
         case 'milliseconds':
-          break
+          return date.getTime() - otherDate.getTime()
       }
-      return date.getTime() - otherDate.getTime()
     }
 
     function toISOString(): string {
