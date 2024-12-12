@@ -1,29 +1,34 @@
 import { DataTable } from '@app/components/data/data-table'
-import { FormInput } from '@app/components/form/form-input'
+import { EditEntryDialog } from '@app/components/time/edit-entry-dialog'
 import { TimeRecorderControls } from '@app/components/time/time-recorder-controls'
 import { Button } from '@app/components/ui/button'
 import { CalendarSelect } from '@app/components/ui/calendar-select'
+import {} from '@app/components/ui/dialog'
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@app/components/ui/dialog'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@app/components/ui/dropdown-menu'
 import { cn } from '@app/utils/cn'
-import { EditTimeEntrySchema } from '@common/forms/time-entry'
 import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
-import { $updateTimeEntry } from '@server/functions/time-entry'
-import { useForm } from '@tanstack/react-form'
+import {
+  $deleteTimeEntry,
+  $updateTimeEntry,
+} from '@server/functions/time-entry'
 import { Link, useRouter } from '@tanstack/react-router'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useServerFn } from '@tanstack/start'
-import { zodValidator } from '@tanstack/zod-form-adapter'
-import { ChevronLeftIcon, ChevronRightIcon, } from 'lucide-react'
-import { useState } from 'react'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EditIcon,
+  MoreVerticalIcon,
+  Trash2Icon,
+} from 'lucide-react'
+import { useMemo, useState } from 'react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   startedAt: string
@@ -54,11 +59,14 @@ const timeTableColumns: ColumnDef<TimeEntry>[] = [
 ]
 
 export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
+  const router = useRouter()
+  const updateEntry = useServerFn($updateTimeEntry)
+  const deleteEntry = useServerFn($deleteTimeEntry)
+
   const dayBefore = time.shift('days', -1)
   const dayAfter = time.shift('days', 1)
   const isToday = time.isToday()
 
-  const router = useRouter()
   function onDateChange(time: Time) {
     if (time.isToday()) return router.navigate({ to: '/time' })
     router.navigate({
@@ -68,6 +76,29 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   }
 
   const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null)
+
+  const columnsWithActions = useMemo<typeof timeTableColumns>(
+    () => [
+      ...timeTableColumns,
+      {
+        id: 'actions',
+        cell: ({ row }) => {
+          const entry = row.original
+
+          return (
+            <ActionsMenu
+              onEdit={() => setSelectedEntry(entry)}
+              onDelete={async () => {
+                await deleteEntry({ data: { id: entry.id } })
+                await router.invalidate()
+              }}
+            />
+          )
+        },
+      },
+    ],
+    [deleteEntry, router],
+  )
 
   return (
     <div className="flex size-full flex-col gap-4">
@@ -99,9 +130,8 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
       <div className="flex flex-col-reverse gap-4 lg:flex-row">
         <DataTable
           className="flex-grow"
-          columns={timeTableColumns}
+          columns={columnsWithActions}
           data={entries}
-          onRowClick={(row) => setSelectedEntry(row)}
         />
 
         {isToday && (
@@ -113,114 +143,44 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
       </div>
 
       <EditEntryDialog
-        key={selectedEntry?.id}
         entry={selectedEntry}
+        onEdit={async (entry) => {
+          await updateEntry({ data: entry })
+          await router.invalidate()
+        }}
         onClose={() => setSelectedEntry(null)}
       />
     </div>
   )
 }
 
-function EditEntryDialog({
-  entry,
-  onClose,
-}: { entry: TimeEntry | null; onClose?: () => void }) {
-  const router = useRouter()
-  const updateEntry = useServerFn($updateTimeEntry)
-
-  const defaultStartedAt = entry?.startedAt
-    ? Time.from(entry.startedAt).formatTime({ short: true })
-    : undefined
-  const defaultEndedAt = entry?.endedAt
-    ? Time.from(entry.endedAt).formatTime({ short: true })
-    : undefined
-  const defaultDescription = entry?.description ?? ''
-
-  const form = useForm({
-    defaultValues: {
-      startedAt: defaultStartedAt,
-      endedAt: defaultEndedAt,
-      description: defaultDescription,
-    },
-    onSubmit: async ({ value: data }) => {
-      if (!entry) return
-      const newStartedAt = data.startedAt
-        ? Time.from(entry.startedAt).setTime(data.startedAt)
-        : undefined
-      const newEndedAt = data.endedAt
-        ? Time.from(entry.endedAt).setTime(data.endedAt)
-        : undefined
-
-      await updateEntry({
-        data: {
-          id: entry?.id,
-          startedAt: newStartedAt?.getDate(),
-          endedAt: newEndedAt?.getDate(),
-          description: data.description,
-        },
-      })
-      await router.invalidate()
-      onClose?.()
-    },
-    validatorAdapter: zodValidator(),
-    validators: {
-      onBlur: EditTimeEntrySchema,
-    },
-  })
-
+function ActionsMenu({
+  onEdit,
+  onDelete,
+}: {
+  onEdit: () => void
+  onDelete: () => void
+}) {
   return (
-    <Dialog open={entry !== null} onOpenChange={(open) => !open && onClose?.()}>
-      <DialogContent>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            form.handleSubmit()
-          }}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          aria-label="Open action menu for row"
+          variant="ghost"
+          size="icon"
         >
-          <DialogHeader>
-            <DialogTitle>Edit entry</DialogTitle>
-            <DialogDescription className="sr-only">
-              Edit time entry dialog
-            </DialogDescription>
-          </DialogHeader>
-
-          {/* <DateInput form={form} name="startedAt" label="Started at" /> */}
-
-          {/* <DateInput form={form} name="endedAt" label="Ended at" /> */}
-
-          <FormInput
-            type="time"
-            form={form}
-            name="startedAt"
-            label="Started at"
-          />
-
-          <FormInput type="time" form={form} name="endedAt" label="Ended at" />
-
-          <FormInput
-            type="text"
-            form={form}
-            name="description"
-            label="Description"
-          />
-
-          <DialogFooter>
-            <form.Subscribe selector={(state) => state.canSubmit}>
-              {(canSubmit) => (
-                <Button type="submit" disabled={!canSubmit}>
-                  Save
-                </Button>
-              )}
-            </form.Subscribe>
-            <DialogClose asChild>
-              <Button type="button" onClick={onClose}>
-                Cancel
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+          <MoreVerticalIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem onClick={onEdit}>
+          <EditIcon /> Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem className="text-destructive" onClick={onDelete}>
+          <Trash2Icon /> Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

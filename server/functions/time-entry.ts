@@ -61,8 +61,8 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
       z.object({
         id: z.string(),
         startedAt: z.date().optional(),
-        endedAt: z.date().optional(),
-        description: z.string().optional(),
+        endedAt: z.date().nullable().optional(),
+        description: z.string().nullable().optional(),
       }),
     ),
   )

@@ -1,5 +1,7 @@
 import type { HTMLAttributes, RefObject } from 'react'
 
+export type Compute<T> = { [K in keyof T]: T[K] } & {}
+
 export type Enumerate<
   N extends number,
   Acc extends number[] = [],
@@ -25,3 +27,5 @@ export type WithRef<
   : Mandatory extends true
     ? T & { ref: RefObject<R> }
     : T & { ref?: RefObject<R> }
+
+export type PartialExcept<T, K extends keyof T> = Compute<Partial<T> & Pick<T, K>>

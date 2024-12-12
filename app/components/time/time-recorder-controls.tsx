@@ -4,7 +4,6 @@ import { Textarea } from '@app/components/ui/textarea'
 import { useNow } from '@app/hooks/use-now'
 import { cn } from '@app/utils/cn'
 import { Time } from '@common/utils/time'
-import type { WithRef } from '@common/utils/types'
 import type { TimeEntry } from '@server/db/schema'
 import {
   $createTimeEntry,
@@ -57,11 +56,10 @@ function useTimeTableControls(entries: TimeRecorderControlsProps['entries']) {
   }
 }
 
-export const TimeRecorderControls = ({
-  ref: elementRef,
+export function TimeRecorderControls({
   entries,
   className,
-}: WithRef<TimeRecorderControlsProps, HTMLDivElement>) => {
+}: TimeRecorderControlsProps) {
   const { start, end, currentEntry } = useTimeTableControls(entries)
   const now = useNow()
   const currentStart = currentEntry ? Time.from(currentEntry.startedAt) : null
@@ -79,7 +77,6 @@ export const TimeRecorderControls = ({
 
   return (
     <div
-      ref={elementRef}
       className={cn(
         'container flex flex-col gap-4 rounded-md border p-4',
         className,
