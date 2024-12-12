@@ -15,5 +15,5 @@ export const EditTimeEntrySchema = z.object({
       message: 'Ended at must be a valid time',
     })
     .optional(),
-  description: z.string().optional(),
+  description: z.string().max(2000, { }).optional(),
 })

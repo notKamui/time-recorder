@@ -140,7 +140,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
 
         {isToday && (
           <TimeRecorderControls
-            className="max-h-96 min-h-96 max-w-full lg:max-w-md"
+            className='max-h-96 min-h-96 max-w-full lg:min-w-96 lg:max-w-96'
             entries={entries}
           />
         )}
