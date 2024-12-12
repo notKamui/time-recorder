@@ -1,6 +1,6 @@
 import type { UUID } from '@common/utils/uuid'
 import type { InferSelectModel } from 'drizzle-orm'
-import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 
 export const usersTable = pgTable('users', {
   id: uuid().primaryKey().defaultRandom().$type<UUID>(),
@@ -28,6 +28,6 @@ export const timeEntriesTable = pgTable('time_entries', {
     .$type<UUID>(),
   startedAt: timestamp({ withTimezone: true, mode: 'date' }).notNull(),
   endedAt: timestamp({ withTimezone: true, mode: 'date' }),
-  description: varchar({ length: 255 }),
+  description: text(),
 })
 export type TimeEntry = InferSelectModel<typeof timeEntriesTable>
