@@ -44,6 +44,7 @@
     "@tanstack/react-table": "^8.20.5",
     "@tanstack/start": "^1.87.11",
     "@tanstack/zod-form-adapter": "^0.40.1",
+    "babel-plugin-react-compiler": "^19.0.0-beta-37ed2a7-20241206",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

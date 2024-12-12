@@ -27,7 +27,6 @@ export function DataTable<TData, TValue>({
   data,
   emptyMessage = 'No data',
   className,
-  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     columns,
@@ -48,7 +47,7 @@ export function DataTable<TData, TValue>({
                 <TableHead
                   key={header.id}
                   style={{ width: header.column.columnDef.size }}
-                  className='text-nowrap'
+                  className="text-nowrap"
                 >
                   {header.isPlaceholder
                     ? null
@@ -67,7 +66,6 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
-                onClick={() => onRowClick?.(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

@@ -28,7 +28,7 @@ import {
   MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
   startedAt: string
@@ -57,7 +57,7 @@ const timeTableColumns: ColumnDef<TimeEntry>[] = [
   {
     accessorKey: 'description',
     header: 'Description',
-    size: Number.MIN_SAFE_INTEGER // force taking all available space
+    size: Number.MIN_SAFE_INTEGER, // force taking all available space
   },
 ]
 
@@ -80,29 +80,26 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
 
   const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null)
 
-  const columnsWithActions = useMemo<typeof timeTableColumns>(
-    () => [
-      ...timeTableColumns,
-      {
-        id: 'actions',
-        cell: ({ row }) => {
-          const entry = row.original
+  const columnsWithActions: typeof timeTableColumns = [
+    ...timeTableColumns,
+    {
+      id: 'actions',
+      cell: ({ row }) => {
+        const entry = row.original
 
-          return (
-            <ActionsMenu
-              onEdit={() => setSelectedEntry(entry)}
-              onDelete={async () => {
-                await deleteEntry({ data: { id: entry.id } })
-                await router.invalidate()
-              }}
-            />
-          )
-        },
-        size: 0 // force minimum width
+        return (
+          <ActionsMenu
+            onEdit={() => setSelectedEntry(entry)}
+            onDelete={async () => {
+              await deleteEntry({ data: { id: entry.id } })
+              await router.invalidate()
+            }}
+          />
+        )
       },
-    ],
-    [deleteEntry, router],
-  )
+      size: 0, // force minimum width
+    },
+  ]
 
   return (
     <div className="flex size-full flex-col gap-4">
@@ -140,13 +137,14 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
 
         {isToday && (
           <TimeRecorderControls
-            className='max-h-96 min-h-96 max-w-full lg:min-w-96 lg:max-w-96'
+            className="max-h-96 min-h-96 max-w-full lg:min-w-96 lg:max-w-96"
             entries={entries}
           />
         )}
       </div>
 
       <EditEntryDialog
+        key={selectedEntry?.id}
         entry={selectedEntry}
         onEdit={async (entry) => {
           await updateEntry({ data: entry })
