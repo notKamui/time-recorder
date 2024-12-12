@@ -3,6 +3,7 @@ import { EditEntryDialog } from '@app/components/time/edit-entry-dialog'
 import { TimeRecorderControls } from '@app/components/time/time-recorder-controls'
 import { Button } from '@app/components/ui/button'
 import { CalendarSelect } from '@app/components/ui/calendar-select'
+import { Checkbox } from '@app/components/ui/checkbox'
 import {} from '@app/components/ui/dialog'
 import {
   DropdownMenu,
@@ -81,6 +82,33 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null)
 
   const columnsWithActions: typeof timeTableColumns = [
+    {
+      id: 'select',
+      header: ({ table }) => {
+        return (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all rows"
+          />
+        )
+      },
+      cell: ({ row }) => {
+        return (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label={`Select row ${row.id}`}
+          />
+        )
+      },
+      size: 64,
+    },
     ...timeTableColumns,
     {
       id: 'actions',
