@@ -45,7 +45,11 @@ export function DataTable<TData, TValue>({
           {headerGroups.map((group) => (
             <TableRow key={group.id}>
               {group.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  style={{ width: header.column.columnDef.size }}
+                  className='text-nowrap'
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(

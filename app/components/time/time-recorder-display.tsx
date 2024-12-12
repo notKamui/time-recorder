@@ -45,16 +45,19 @@ const timeTableColumns: ColumnDef<TimeEntry>[] = [
     accessorKey: 'startedAt',
     accessorFn: (row) => Time.from(row.startedAt).formatTime(),
     header: 'Started at',
+    size: 0, // force minimum width
   },
   {
     accessorKey: 'endedAt',
     accessorFn: (row) =>
       row.endedAt ? Time.from(row.endedAt).formatTime() : null,
     header: 'Ended at',
+    size: 0, // force minimum width
   },
   {
     accessorKey: 'description',
     header: 'Description',
+    size: Number.MIN_SAFE_INTEGER // force taking all available space
   },
 ]
 
@@ -95,6 +98,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
             />
           )
         },
+        size: 0 // force minimum width
       },
     ],
     [deleteEntry, router],
