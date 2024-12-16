@@ -1,4 +1,5 @@
 import { FormInput } from '@app/components/form/form-input'
+import { TextInput } from '@app/components/form/text-input'
 import { Button } from '@app/components/ui/button'
 import {
   Dialog,
@@ -71,6 +72,7 @@ export function EditEntryDialog({
             event.stopPropagation()
             form.handleSubmit()
           }}
+          className="space-y-4"
         >
           <DialogHeader>
             <DialogTitle>Edit entry</DialogTitle>
@@ -88,11 +90,11 @@ export function EditEntryDialog({
 
           <FormInput type="time" form={form} name="endedAt" label="Ended at" />
 
-          <FormInput
-            type="text"
+          <TextInput
             form={form}
             name="description"
             label="Description"
+            className="max-h-60 min-h-60 resize-none"
           />
 
           <DialogFooter>
