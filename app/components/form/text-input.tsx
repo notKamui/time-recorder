@@ -1,10 +1,10 @@
 import { FieldInfo } from '@app/components/form/field-info'
-import { CalendarSelect } from '@app/components/ui/calendar-select'
-import { Label } from '@radix-ui/react-label'
+import { Label } from '@app/components/ui/label'
+import { Textarea } from '@app/components/ui/textarea'
 import type { ReactFormExtendedApi, Validator } from '@tanstack/react-form'
 import type { ZodType, ZodTypeDef } from 'zod'
 
-export interface DateInputProps<F extends Record<string, any>> {
+export interface TextInputProps<F extends Record<string, any>> {
   form: ReactFormExtendedApi<
     F,
     Validator<unknown, ZodType<any, ZodTypeDef, any>>
@@ -13,21 +13,22 @@ export interface DateInputProps<F extends Record<string, any>> {
   label: string
 }
 
-export function DateInput<F extends Record<string, any>>({
+export function TextInput<F extends Record<string, any>>({
   name,
   form,
   label,
-}: DateInputProps<F>) {
+}: TextInputProps<F>) {
   return (
     <form.Field name={name as any}>
       {(field) => (
         <div className="space-y-2">
           <Label htmlFor={field.name}>{label}</Label>
-          <CalendarSelect
+          <Textarea
+            id={field.name}
+            name={field.name}
             value={field.state.value as any}
             onBlur={field.handleBlur}
-            onChange={(date) => field.handleChange(date as any)}
-            ariaHidden
+            onChange={(event) => field.handleChange(event.target.value as any)}
           />
           <FieldInfo field={field} />
         </div>
