@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_authed/time/')({
     return {
       entries,
       date: time.getDate(),
-      crumbs: crumbs({ title: 'Time recorder', to: '/time' }),
+      crumbs: crumbs({ title: 'Time recorder' }),
     }
   },
   component: RouteComponent,

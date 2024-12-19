@@ -29,7 +29,7 @@ export const Route = createFileRoute('/_authed/time/$day')({
     return {
       entries,
       date: time.getDate(),
-      crumbs: crumbs({ title: time.formatDay({ short: true }) }),
+      crumbs: crumbs({ title: 'Time recorder', to: '/time' }, { title: time.formatDay({ short: true }) }),
     }
   },
   component: RouteComponent,
