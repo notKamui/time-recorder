@@ -3,7 +3,10 @@ export interface TokenBucket {
   refilledAt: number
 }
 
-export function createTokenBucketManager<Key>(max: number, refillRateSeconds: number) {
+export function createTokenBucketManager<Key>(
+  max: number,
+  refillRateSeconds: number,
+) {
   const storage = new Map<Key, TokenBucket>()
 
   function consume(key: Key, cost: number): boolean {

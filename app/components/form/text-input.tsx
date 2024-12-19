@@ -5,7 +5,10 @@ import type { ReactFormExtendedApi, Validator } from '@tanstack/react-form'
 import type { ComponentProps } from 'react'
 import type { ZodType, ZodTypeDef } from 'zod'
 
-export type TextInputProps<F extends Record<string, any>> = Omit<ComponentProps<typeof Textarea>, 'form'> & {
+export type TextInputProps<F extends Record<string, any>> = Omit<
+  ComponentProps<typeof Textarea>,
+  'form'
+> & {
   form: ReactFormExtendedApi<
     F,
     Validator<unknown, ZodType<any, ZodTypeDef, any>> | undefined

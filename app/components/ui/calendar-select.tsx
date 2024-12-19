@@ -22,7 +22,7 @@ export function CalendarSelect({
   onChange,
   onBlur,
   className,
-  ariaHidden = false
+  ariaHidden = false,
 }: CalendarSelectProps) {
   return (
     <Popover>
@@ -43,7 +43,11 @@ export function CalendarSelect({
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start" aria-hidden={ariaHidden}>
+      <PopoverContent
+        className="w-auto p-0"
+        align="start"
+        aria-hidden={ariaHidden}
+      >
         <Calendar
           mode="single"
           selected={value}

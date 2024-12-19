@@ -28,4 +28,6 @@ export type WithRef<
     ? T & { ref: RefObject<R> }
     : T & { ref?: RefObject<R> }
 
-export type PartialExcept<T, K extends keyof T> = Compute<Partial<T> & Pick<T, K>>
+export type PartialExcept<T, K extends keyof T> = Compute<
+  Partial<T> & Pick<T, K>
+>

@@ -1,6 +1,8 @@
-import { json } from "@tanstack/start"
+import { json } from '@tanstack/start'
 
-export async function flatErrors<R>(fn: () => Promise<R>): Promise<R | Response> {
+export async function flatErrors<R>(
+  fn: () => Promise<R>,
+): Promise<R | Response> {
   try {
     return await fn()
   } catch (error) {

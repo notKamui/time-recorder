@@ -1,5 +1,5 @@
 import { flatErrors } from '@app/utils/flat-errors'
-import { db, } from '@server/db'
+import { db } from '@server/db'
 import { sessionsTable } from '@server/db/schema'
 import { createTokenBucketManager } from '@server/utils/rate-limit'
 import { badRequest } from '@server/utils/response'
