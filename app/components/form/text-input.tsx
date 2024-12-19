@@ -8,7 +8,7 @@ import type { ZodType, ZodTypeDef } from 'zod'
 export type TextInputProps<F extends Record<string, any>> = Omit<ComponentProps<typeof Textarea>, 'form'> & {
   form: ReactFormExtendedApi<
     F,
-    Validator<unknown, ZodType<any, ZodTypeDef, any>>
+    Validator<unknown, ZodType<any, ZodTypeDef, any>> | undefined
   >
   name: keyof F
   label: string

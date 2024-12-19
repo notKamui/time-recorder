@@ -20,7 +20,6 @@
         "@tanstack/react-router": "^1.91.3",
         "@tanstack/react-table": "^8.20.6",
         "@tanstack/start": "^1.91.3",
-        "@tanstack/zod-form-adapter": "^0.40.4",
         "babel-plugin-react-compiler": "^19.0.0-beta-37ed2a7-20241206",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -490,8 +489,6 @@
     "@tanstack/table-core": ["@tanstack/table-core@8.20.5", "", {}, "sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg=="],
 
     "@tanstack/virtual-file-routes": ["@tanstack/virtual-file-routes@1.87.6", "", {}, "sha512-PTpeM8SHL7AJM0pJOacFvHribbUODS51qe9NsMqku4mogh6BWObY1EeVmeGnp9o3VngAEsf+rJMs2zqIVz3WFA=="],
-
-    "@tanstack/zod-form-adapter": ["@tanstack/zod-form-adapter@0.40.4", "", { "dependencies": { "@tanstack/form-core": "0.40.4" }, "peerDependencies": { "zod": "^3.x" } }, "sha512-omGATFgy+r9U3LiWO5UfJsdiI6LkQqqrLuZJ7tVsDHGjSh6ZYcl6m+hxi42xxLAMSeGSBqypaUvfPiYCFWXnlQ=="],
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.9.0", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw=="],
 

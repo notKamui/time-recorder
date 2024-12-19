@@ -14,7 +14,6 @@ import { $signUp } from '@server/functions/user'
 import { useForm } from '@tanstack/react-form'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/start'
-import { zodValidator } from '@tanstack/zod-form-adapter'
 
 export const Route = createFileRoute('/sign-up')({
   loader: () => {
@@ -35,7 +34,6 @@ function RouteComponent() {
     onSubmit: async ({ value: data }) => {
       await signUp({ data })
     },
-    validatorAdapter: zodValidator(),
     validators: {
       onChangeAsync: SignUpSchema,
       onChangeAsyncDebounceMs: 500,

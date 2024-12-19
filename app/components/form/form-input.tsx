@@ -8,7 +8,7 @@ export interface FormInputProps<F extends Record<string, any>> {
   type: React.HTMLInputTypeAttribute
   form: ReactFormExtendedApi<
     F,
-    Validator<unknown, ZodType<any, ZodTypeDef, any>>
+    Validator<unknown, ZodType<any, ZodTypeDef, any>> | undefined
   >
   name: keyof F
   label: string

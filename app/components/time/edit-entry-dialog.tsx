@@ -15,7 +15,6 @@ import { Time } from '@common/utils/time'
 import type { PartialExcept } from '@common/utils/types'
 import type { TimeEntry } from '@server/db/schema'
 import { useForm } from '@tanstack/react-form'
-import { zodValidator } from '@tanstack/zod-form-adapter'
 
 export function EditEntryDialog({
   entry,
@@ -57,7 +56,6 @@ export function EditEntryDialog({
       })
       onClose?.()
     },
-    validatorAdapter: zodValidator(),
     validators: {
       onBlur: EditTimeEntrySchema,
     },

@@ -14,7 +14,6 @@ import { $signIn } from '@server/functions/user'
 import { useForm } from '@tanstack/react-form'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/start'
-import { zodValidator } from '@tanstack/zod-form-adapter'
 
 export const Route = createFileRoute('/login')({
   loader: () => {
@@ -31,7 +30,6 @@ function RouteComponent() {
     onSubmit: async ({ value: data }) => {
       await signIn({ data })
     },
-    validatorAdapter: zodValidator(),
     validators: {
       onBlur: SignInSchema,
     },
