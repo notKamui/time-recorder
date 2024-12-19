@@ -107,7 +107,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           />
         )
       },
-      size: 64,
+      size: 32,
     },
     ...timeTableColumns,
     {
@@ -125,7 +125,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           />
         )
       },
-      size: 0, // force minimum width
+      size: 50, // force minimum width
     },
   ]
 
@@ -161,6 +161,7 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
           className="flex-grow"
           columns={columnsWithActions}
           data={entries}
+          onRowDoubleClick={(entry) => setSelectedEntry(entry)}
         />
 
         {isToday && (

@@ -6,9 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from '@app/components/ui/table'
+import { useLongPress } from '@app/hooks/use-long-press'
 import { cn } from '@app/utils/cn'
 import {
   type ColumnDef,
+  type Row,
   type RowSelectionState,
   flexRender,
   getCoreRowModel,
@@ -22,6 +24,7 @@ export type DataTableProps<TData, TValue> = {
   emptyMessage?: string
   className?: string
   onRowClick?: (row: TData) => void
+  onRowDoubleClick?: (row: TData) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -29,6 +32,8 @@ export function DataTable<TData, TValue>({
   data,
   emptyMessage = 'No data',
   className,
+  onRowClick,
+  onRowDoubleClick,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
@@ -71,16 +76,12 @@ export function DataTable<TData, TValue>({
         <TableBody>
           {rows?.length ? (
             rows.map((row) => (
-              <TableRow
+              <DataRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
+                row={row}
+                onRowClick={onRowClick}
+                onRowDoubleClick={onRowDoubleClick}
+              />
             ))
           ) : (
             <TableRow>
@@ -92,5 +93,39 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
+  )
+}
+
+function DataRow<TData>({
+  row,
+  onRowClick,
+  onRowDoubleClick,
+}: {
+  row: Row<TData>
+  onRowClick?: (row: TData) => void
+  onRowDoubleClick?: (row: TData) => void
+}) {
+  const { onTouchStart, onTouchEnd } = useLongPress(() =>
+    onRowDoubleClick?.(row.original),
+  )
+
+  return (
+    <TableRow
+      data-state={row.getIsSelected() && 'selected'}
+      onClick={() => onRowClick?.(row.original)}
+      onDoubleClick={() => onRowDoubleClick?.(row.original)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      className={cn((onRowClick || onRowDoubleClick) && 'cursor-pointer')}
+    >
+      {row.getVisibleCells().map((cell) => (
+        <TableCell
+          key={cell.id}
+          className="max-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+        >
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
   )
 }
