@@ -1,8 +1,8 @@
 import '@server/middlewares/global'
 import { validate } from '@server/utils/validate'
 import { createServerFn } from '@tanstack/start'
-import { z } from 'vinxi'
 import { getCookie, setCookie } from 'vinxi/http'
+import { z } from 'zod'
 
 const ThemeSchema = z.object({
   theme: z.enum(['light', 'dark']).default('dark'),
