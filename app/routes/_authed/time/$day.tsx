@@ -1,17 +1,29 @@
 import { RecorderDisplay } from '@app/components/time/time-recorder-display'
 import { title } from '@app/components/ui/primitives/typography'
 import { crumbs } from '@app/hooks/use-crumbs'
+import { Collection } from '@common/utils/collection'
 import { Time } from '@common/utils/time'
-import { $getTimeEntriesByDay } from '@server/functions/time-entry'
+import {
+  $deleteTimeEntry,
+  $getTimeEntriesByDay,
+} from '@server/functions/time-entry'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authed/time/$day')({
   loader: async ({ params: { day } }) => {
     const time = Time.from(day)
-    const entries = await $getTimeEntriesByDay({
-      data: { date: time.getDate() },
-    })
+    const [entries, notEnded] = Collection.partition(
+      await $getTimeEntriesByDay({
+        data: { date: time.getDate() },
+      }),
+      (entry) => entry.endedAt !== null,
+    )
+
     entries.sort((a, b) => b.startedAt.getTime() - a.startedAt.getTime())
+    await Promise.all(
+      notEnded.map((entry) => $deleteTimeEntry({ data: { id: entry.id } })),
+    )
+
     return {
       entries,
       date: time.getDate(),

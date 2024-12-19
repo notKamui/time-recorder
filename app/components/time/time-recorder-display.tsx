@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@app/components/ui/dropdown-menu'
+import { useNow } from '@app/hooks/use-now'
 import { cn } from '@app/utils/cn'
 import { Time } from '@common/utils/time'
 import type { TimeEntry } from '@server/db/schema'
@@ -131,30 +132,33 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
 
   return (
     <div className="flex size-full flex-col gap-4">
-      <div className="flex flex-row items-center">
-        <Button size="icon" className="h-[36px] rounded-r-none" asChild>
-          <Link to="/time/$day" params={{ day: dayBefore.toISOString() }}>
-            <ChevronLeftIcon />
-          </Link>
-        </Button>
-        <CalendarSelect
-          value={time.getDate()}
-          onChange={(date) => onDateChange(Time.from(date))}
-          className={cn(isToday ? 'rounded-l-none' : 'rounded-none')}
-        />
-        <h3 className="sr-only">{time.formatDay()}</h3>
-        {!isToday && (
-          <Button
-            size="icon"
-            className={cn('h-[36px] rounded-l-none')}
-            disabled={isToday}
-            asChild
-          >
-            <Link to="/time/$day" params={{ day: dayAfter.toISOString() }}>
-              <ChevronRightIcon />
+      <div className="flex flex-row gap-4 max-sm:flex-col">
+        <div className="flex flex-row items-center">
+          <Button size="icon" className="h-[36px] rounded-r-none" asChild>
+            <Link to="/time/$day" params={{ day: dayBefore.toISOString() }}>
+              <ChevronLeftIcon />
             </Link>
           </Button>
-        )}
+          <CalendarSelect
+            value={time.getDate()}
+            onChange={(date) => onDateChange(Time.from(date))}
+            className={cn(isToday ? 'rounded-l-none' : 'rounded-none')}
+          />
+          <h3 className="sr-only">{time.formatDay()}</h3>
+          {!isToday && (
+            <Button
+              size="icon"
+              className={cn('h-[36px] rounded-l-none')}
+              disabled={isToday}
+              asChild
+            >
+              <Link to="/time/$day" params={{ day: dayAfter.toISOString() }}>
+                <ChevronRightIcon />
+              </Link>
+            </Button>
+          )}
+        </div>
+        <TotalTime entries={entries} />
       </div>
       <div className="flex flex-col-reverse gap-4 lg:flex-row">
         <DataTable
@@ -213,5 +217,29 @@ function ActionsMenu({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+function TotalTime({ entries }: { entries: TimeEntry[] }) {
+  const now = useNow().getDate().getTime()
+  const totalTime = entries
+    .filter((entry) => entry.endedAt)
+    .reduce(
+      (acc, entry) =>
+        acc + entry.endedAt!.getTime() - entry.startedAt.getTime(),
+      0,
+    )
+  const currentEntry = entries.find((entry) => !entry.endedAt)
+  const currentElapsed = currentEntry
+    ? now - currentEntry.startedAt.getTime()
+    : 0
+
+  return (
+    entries.length > 0 && (
+      <div className='flex h-[36px] flex-row items-center gap-2 rounded-md border px-4'>
+        <span className="font-extrabold">Total:</span>
+        <span>{Time.formatTime(totalTime + currentElapsed)}</span>
+      </div>
+    )
   )
 }

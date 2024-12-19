@@ -21,6 +21,17 @@ export interface Time {
 }
 
 export namespace Time {
+  export function formatTime(ms: number) {
+    const hours = Math.floor(ms / (1000 * 60 * 60))
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000)
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+      2,
+      '0',
+    )}:${String(seconds).padStart(2, '0')}`
+  }
+
+
   export function now(): Time {
     return from(new Date())
   }
@@ -145,13 +156,7 @@ export namespace Time {
     // HH:MM:SS
     function formatDiff(other: Time): string {
       const diff = Math.abs(compare(other, 'milliseconds'))
-      const hours = Math.floor(diff / (1000 * 60 * 60))
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
-        2,
-        '0',
-      )}:${String(seconds).padStart(2, '0')}`
+      return Time.formatTime(diff)
     }
 
     function setDay(time: Date | Time): Time {
