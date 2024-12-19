@@ -95,16 +95,25 @@ export function EditEntryDialog({
             className="max-h-60 min-h-60 resize-none"
           />
 
-          <DialogFooter>
+          <DialogFooter className="max-sm:flex max-sm:flex-row max-sm:gap-4">
             <form.Subscribe selector={(state) => state.canSubmit}>
               {(canSubmit) => (
-                <Button type="submit" disabled={!canSubmit}>
+                <Button
+                  type="submit"
+                  disabled={!canSubmit}
+                  className="max-sm:grow"
+                >
                   Save
                 </Button>
               )}
             </form.Subscribe>
             <DialogClose asChild>
-              <Button type="button" onClick={onClose}>
+              <Button
+                type="button"
+                onClick={onClose}
+                className="max-sm:grow"
+                variant="destructive"
+              >
                 Cancel
               </Button>
             </DialogClose>
