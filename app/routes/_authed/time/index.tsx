@@ -5,7 +5,7 @@ import { Time } from '@common/utils/time'
 import { $getTimeEntriesByDay } from '@server/functions/time-entry'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/_authed/time')({
+export const Route = createFileRoute('/_authed/time/')({
   loader: async () => {
     const time = Time.now()
     const entries = await $getTimeEntriesByDay({

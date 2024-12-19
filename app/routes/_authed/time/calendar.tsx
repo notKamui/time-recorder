@@ -4,10 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/_authed/time/calendar')({
   loader: () => {
     return {
-      crumbs: crumbs(
-        { title: 'Time recorder', to: '/time' },
-        { title: 'Calendar' },
-      ),
+      crumbs: crumbs({ title: 'Calendar' }),
     }
   },
   component: RouteComponent,
