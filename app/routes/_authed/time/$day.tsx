@@ -7,11 +7,13 @@ import {
   $deleteTimeEntry,
   $getTimeEntriesByDay,
 } from '@server/functions/time-entry'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authed/time/$day')({
   loader: async ({ params: { day } }) => {
     const time = Time.from(day)
+    if (time.isToday()) throw redirect({ to: '/time' })
+
     const [entries, notEnded] = Collection.partition(
       await $getTimeEntriesByDay({
         data: { date: time.getDate() },

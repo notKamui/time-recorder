@@ -1,8 +1,10 @@
+import { tryAsync } from '@common/utils/try'
 import { db, takeUniqueOrNull } from '@server/db'
 import { timeEntriesTable } from '@server/db/schema'
 import '@server/middlewares/global'
 import { $$rateLimit } from '@server/middlewares/rate-limit'
 import { $$session } from '@server/middlewares/session'
+import { badRequest } from '@server/utils/response'
 import { validate } from '@server/utils/validate'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
@@ -70,18 +72,29 @@ export const $updateTimeEntry = createServerFn({ method: 'POST' })
       context: { user },
       data: { id, startedAt, endedAt, description },
     }) => {
-      const timeEntry = await db
-        .update(timeEntriesTable)
-        .set({ startedAt, endedAt, description })
-        .where(
-          and(
-            eq(timeEntriesTable.id, id),
-            eq(timeEntriesTable.userId, user.id),
-          ),
-        )
-        .returning()
-        .then(takeUniqueOrNull)
+      const [error, timeEntry] = await tryAsync(
+        db.transaction(async (tx) => {
+          const res = await tx
+            .update(timeEntriesTable)
+            .set({ startedAt, endedAt, description })
+            .where(
+              and(
+                eq(timeEntriesTable.id, id),
+                eq(timeEntriesTable.userId, user.id),
+              ),
+            )
+            .returning()
+            .then(takeUniqueOrNull)
 
+          if (res && endedAt && endedAt.getTime() < res.startedAt.getTime()) {
+            tx.rollback()
+          }
+
+          return res
+        }),
+      )
+
+      if (error) throw badRequest('End date must be after start date', 400)
       if (!timeEntry) throw notFound()
 
       return timeEntry

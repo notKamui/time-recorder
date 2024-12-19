@@ -236,7 +236,7 @@ function TotalTime({ entries }: { entries: TimeEntry[] }) {
 
   return (
     entries.length > 0 && (
-      <div className='flex h-[36px] flex-row items-center gap-2 rounded-md border px-4'>
+      <div className="flex h-[36px] flex-row items-center gap-2 rounded-md border px-4">
         <span className="font-extrabold">Total:</span>
         <span>{Time.formatTime(totalTime + currentElapsed)}</span>
       </div>

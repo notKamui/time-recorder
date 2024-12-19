@@ -31,7 +31,6 @@ export namespace Time {
     )}:${String(seconds).padStart(2, '0')}`
   }
 
-
   export function now(): Time {
     return from(new Date())
   }
