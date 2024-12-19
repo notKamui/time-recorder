@@ -19,7 +19,8 @@ export const EditTimeEntrySchema = z
     description: z.string().max(2000, {}).optional(),
   })
   .refine(
-    (data) => !data.endedAt || !data.startedAt || data.endedAt >= data.startedAt,
+    (data) =>
+      !data.endedAt || !data.startedAt || data.endedAt >= data.startedAt,
     {
       message: 'End time must be after (or equal to) start time',
       path: ['endedAt'],

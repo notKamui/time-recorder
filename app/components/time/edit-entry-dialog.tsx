@@ -20,10 +20,12 @@ export function EditEntryDialog({
   entry,
   onEdit,
   onClose,
+  ref,
 }: {
   entry: TimeEntry | null
   onEdit: (entry: PartialExcept<TimeEntry, 'id'>) => Promise<void>
   onClose?: () => void
+  ref?: React.RefObject<HTMLDivElement>
 }) {
   const defaultStartedAt = entry?.startedAt
     ? Time.from(entry.startedAt).formatTime({ short: true })
@@ -63,7 +65,7 @@ export function EditEntryDialog({
 
   return (
     <Dialog open={entry !== null} onOpenChange={(open) => !open && onClose?.()}>
-      <DialogContent>
+      <DialogContent ref={ref}>
         <form
           onSubmit={(event) => {
             event.preventDefault()

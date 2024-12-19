@@ -30,6 +30,7 @@ import {
   MoreVerticalIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 
 export type TimeTableData = Omit<TimeEntry, 'startedAt' | 'endedAt'> & {
@@ -62,6 +63,8 @@ const timeTableColumns: ColumnDef<TimeEntry>[] = [
     size: Number.MIN_SAFE_INTEGER, // force taking all available space
   },
 ]
+
+const MotionDialog = motion.create(EditEntryDialog)
 
 export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
   const router = useRouter()
@@ -176,15 +179,20 @@ export function RecorderDisplay({ time, entries }: RecorderDisplayProps) {
         )}
       </div>
 
-      <EditEntryDialog
-        key={selectedEntry?.id}
-        entry={selectedEntry}
-        onEdit={async (entry) => {
-          await updateEntry({ data: entry })
-          await router.invalidate()
-        }}
-        onClose={() => setSelectedEntry(null)}
-      />
+      <AnimatePresence>
+        <MotionDialog
+          key={selectedEntry?.id}
+          initial={{ opacity: 1, scale: 1, y: '-50%', x: '-50%' }}
+          exit={{ opacity: 0, scale: 0.8, y: '-50%', x: '-50%' }}
+          transition={{ duration: 0.15 }}
+          entry={selectedEntry}
+          onEdit={async (entry) => {
+            await updateEntry({ data: entry })
+            await router.invalidate()
+          }}
+          onClose={() => setSelectedEntry(null)}
+        />
+      </AnimatePresence>
     </div>
   )
 }
