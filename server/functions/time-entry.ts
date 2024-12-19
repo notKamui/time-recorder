@@ -8,7 +8,7 @@ import { badRequest } from '@server/utils/response'
 import { validate } from '@server/utils/validate'
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
-import { and, eq, gte, isNull, lte, or } from 'drizzle-orm'
+import { and, eq, gte, isNotNull, isNull, lte, or, sql } from 'drizzle-orm'
 import { z } from 'zod'
 
 export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
@@ -33,6 +33,75 @@ export const $getTimeEntriesByDay = createServerFn({ method: 'GET' })
           ),
         ),
       )
+
+    return result
+  })
+
+export const $getTimeStatsBy = createServerFn({ method: 'GET' })
+  .middleware([$$session])
+  .validator(
+    validate(
+      z.object({ date: z.date(), type: z.enum(['week', 'month', 'year']) }),
+    ),
+  )
+  .handler(async ({ context: { user }, data: { date, type } }) => {
+    // for the given user
+    // depending on the type given
+    // get totals of time differences per units of time
+    // for the given date.
+    // ignore entries that are not ended
+    // - week: get the totals per day of the week of the date
+    // - month: get the totals per day of the month of the date
+    // - year: get the totals per month of the year of the date
+
+    const startDate = new Date(date)
+    const endDate = new Date(date)
+    let groupBy: 'day' | 'month'
+
+    switch (type) {
+      case 'week':
+        startDate.setDate(date.getDate() - date.getDay())
+        endDate.setDate(startDate.getDate() + 6)
+        groupBy = 'day'
+        break
+      case 'month':
+        startDate.setDate(1)
+        endDate.setMonth(startDate.getMonth() + 1)
+        endDate.setDate(0)
+        groupBy = 'day'
+        break
+      case 'year':
+        startDate.setMonth(0, 1)
+        endDate.setFullYear(startDate.getFullYear() + 1)
+        endDate.setMonth(0, 0)
+        groupBy = 'month'
+        break
+      default:
+        throw new Error('Invalid type')
+    }
+
+    const result = await db
+      .select({
+        unit:
+          groupBy === 'day'
+            ? sql<
+                typeof groupBy
+              >`DATE_TRUNC('day', ${timeEntriesTable.startedAt})`
+            : sql<
+                typeof groupBy
+              >`DATE_TRUNC('month', ${timeEntriesTable.startedAt})`,
+        total: sql<number>`SUM(EXTRACT(EPOCH FROM (${timeEntriesTable.endedAt} - ${timeEntriesTable.startedAt})))`,
+      })
+      .from(timeEntriesTable)
+      .where(
+        and(
+          eq(timeEntriesTable.userId, user.id),
+          isNotNull(timeEntriesTable.endedAt),
+          gte(timeEntriesTable.startedAt, startDate),
+          lte(timeEntriesTable.endedAt, endDate),
+        ),
+      )
+      .groupBy(({ unit }) => unit)
 
     return result
   })

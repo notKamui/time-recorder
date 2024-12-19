@@ -2,7 +2,7 @@ import { RecorderDisplay } from '@app/components/time/time-recorder-display'
 import { title } from '@app/components/ui/primitives/typography'
 import { crumbs } from '@app/hooks/use-crumbs'
 import { Time } from '@common/utils/time'
-import { $getTimeEntriesByDay } from '@server/functions/time-entry'
+import { $getTimeEntriesByDay, $getTimeStatsBy } from '@server/functions/time-entry'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authed/time/')({
@@ -12,6 +12,9 @@ export const Route = createFileRoute('/_authed/time/')({
       data: { date: time.getDate() },
     })
     entries.sort((a, b) => b.startedAt.getTime() - a.startedAt.getTime())
+
+    console.log(await $getTimeStatsBy({ data: { date: time.getDate(), type: 'week' } }))
+
     return {
       entries,
       date: time.getDate(),
