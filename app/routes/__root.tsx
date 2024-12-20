@@ -1,4 +1,4 @@
-import { Cursor } from '@app/components/cursor'
+import { Cursor, } from '@app/components/cursor'
 import { RouterDevtools } from '@app/components/router-devtools'
 import { ThemeProvider } from '@app/components/theme/provider'
 import { Toaster } from '@app/components/ui/sonner'

@@ -27,27 +27,17 @@ export function Cursor() {
     function mouseMove(e: MouseEvent) {
       const cursor = ref.current
       if (!cursor) return
-      if (cursor) {
-        cursor.style.left = `${e.clientX}px`
-        cursor.style.top = `${e.clientY}px`
-      }
+      cursor.style.left = `${e.clientX}px`
+      cursor.style.top = `${e.clientY}px`
     }
 
     function mouseEnter(e: MouseEvent) {
       if (!(e.target instanceof HTMLElement)) return
 
-      if (
-        e.target.tagName === 'A' ||
-        e.target.tagName === 'BUTTON' ||
-        e.target.classList.contains('clickable')
-      ) {
+      const computedStyle = window.getComputedStyle(e.target)
+      if (computedStyle.cursor === 'pointer') {
         setCursorVariant('pointer')
-      } else if (
-        e.target.tagName === 'INPUT' ||
-        e.target.tagName === 'TEXTAREA' ||
-        e.target.tagName === 'P' ||
-        e.target.isContentEditable
-      ) {
+      } else if (computedStyle.cursor === 'text') {
         setCursorVariant('caret')
         setCaretHeight(e.target.clientHeight)
       } else {
@@ -59,14 +49,14 @@ export function Cursor() {
       setCursorVariant('default')
     }
 
-    window.addEventListener('mousemove', mouseMove)
-    window.addEventListener('mouseover', mouseEnter)
-    window.addEventListener('mouseout', mouseLeave)
+    window.addEventListener('pointermove', mouseMove)
+    window.addEventListener('pointerover', mouseEnter)
+    window.addEventListener('pointerout', mouseLeave)
 
     return () => {
-      window.removeEventListener('mousemove', mouseMove)
-      window.removeEventListener('mouseover', mouseEnter)
-      window.removeEventListener('mouseout', mouseLeave)
+      window.removeEventListener('pointermove', mouseMove)
+      window.removeEventListener('pointerover', mouseEnter)
+      window.removeEventListener('pointerout', mouseLeave)
     }
   }, [])
 
