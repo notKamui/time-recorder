@@ -76,12 +76,12 @@ export function Cursor() {
       translateX: '-50%',
       translateY: '-50%',
       transition: "transform 0.2s ease, opacity 0.2s ease",
-      opacity: isHovering ? 0.5 : 1,
-      scale: isHovering ? 1.7 : 1,
+      scale: isHovering ? 2.5 : 1,
       width: 20,
       height: 20,
       borderRadius: '50%',
-      backgroundColor: theme === 'dark' ? 'white' : 'black',
+      backgroundColor: theme === 'dark' ? 'hsl(var(--primary))' : 'hsl(var(--secondary))',
+      mixBlendMode: 'difference',
     }}
   />)
 }
