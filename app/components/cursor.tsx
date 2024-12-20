@@ -6,31 +6,17 @@ export function Cursor() {
   const [caretHeight, setCaretHeight] = useState(0)
 
   const variants = {
-    default: {
-      backgroundColor: '#ffffff',
-      borderRadius: '50%',
-      width: 20,
-      height: 20,
-      translateX: '-50%',
-      translateY: '-50%',
-    },
+    default: {},
     pointer: {
-      scale: 1.5,
       backgroundColor: 'transparent',
       border: '2px solid #ffffff',
-      borderRadius: '50%',
-      width: 20,
-      height: 20,
-      translateX: '-50%',
-      translateY: '-50%',
+      width: 40,
+      height: 40,
     },
     caret: {
-      backgroundColor: '#ffffff',
       borderRadius: '0%',
       width: 2,
       height: caretHeight,
-      translateX: '-50%',
-      translateY: '-50%',
     },
   } satisfies Variants
 
@@ -48,24 +34,24 @@ export function Cursor() {
     }
 
     function mouseEnter(e: MouseEvent) {
-      if (e.target instanceof HTMLElement) {
-        if (
-          e.target.tagName === 'A' ||
-          e.target.tagName === 'BUTTON' ||
-          e.target.classList.contains('clickable')
-        ) {
-          setCursorVariant('pointer')
-        } else if (
-          e.target.tagName === 'INPUT' ||
-          e.target.tagName === 'TEXTAREA' ||
-          e.target.tagName === 'P' ||
-          e.target.isContentEditable
-        ) {
-          setCursorVariant('caret')
-          setCaretHeight(e.target.clientHeight)
-        } else {
-          setCursorVariant('default')
-        }
+      if (!(e.target instanceof HTMLElement)) return
+
+      if (
+        e.target.tagName === 'A' ||
+        e.target.tagName === 'BUTTON' ||
+        e.target.classList.contains('clickable')
+      ) {
+        setCursorVariant('pointer')
+      } else if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.tagName === 'P' ||
+        e.target.isContentEditable
+      ) {
+        setCursorVariant('caret')
+        setCaretHeight(e.target.clientHeight)
+      } else {
+        setCursorVariant('default')
       }
     }
 
@@ -90,6 +76,14 @@ export function Cursor() {
       className="pointer-events-none fixed z-[9999]"
       variants={variants}
       animate={cursorVariant}
+      style={{
+        translateX: '-50%',
+        translateY: '-50%',
+        borderRadius: '50%',
+        width: 20,
+        height: 20,
+        backgroundColor: '#ffffff',
+      }}
     />
   )
 }
