@@ -1,4 +1,4 @@
-import { Cursor, } from '@app/components/cursor'
+import { Cursor } from '@app/components/cursor'
 import { RouterDevtools } from '@app/components/router-devtools'
 import { ThemeProvider } from '@app/components/theme/provider'
 import { Toaster } from '@app/components/ui/sonner'
@@ -80,11 +80,11 @@ export const Route = createRootRoute({
                 visibleToasts={5}
               />
             </MainLayout>
+            <Cursor />
           </ThemeProvider>
           <Suspense>
             <RouterDevtools position="bottom-right" />
           </Suspense>
-          <Cursor />
           <ScrollRestoration />
           <Scripts />
         </body>
