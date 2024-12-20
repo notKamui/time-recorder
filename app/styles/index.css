@@ -67,9 +67,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border cursor-none;
   }
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+
 }

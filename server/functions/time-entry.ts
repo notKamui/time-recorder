@@ -91,6 +91,7 @@ export const $getTimeStatsBy = createServerFn({ method: 'GET' })
                 typeof groupBy
               >`DATE_TRUNC('month', ${timeEntriesTable.startedAt})`,
         total: sql<number>`SUM(EXTRACT(EPOCH FROM (${timeEntriesTable.endedAt} - ${timeEntriesTable.startedAt})))`,
+       // context: groupBy === 'day' ? sql<number>`DOW FROM ${timeEntriesTable.startedAt}` : sql<number>`EXTRACT(MONTH FROM ${timeEntriesTable.startedAt})`,
       })
       .from(timeEntriesTable)
       .where(
